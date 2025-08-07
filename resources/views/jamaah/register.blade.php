@@ -94,6 +94,11 @@
       alert("Pendaftaran berhasil! Silakan login.");
       window.location.href = "login.html";
     }
+    <form method="POST" action="{{ route('register.submit') }}">
+    @csrf
+    <!-- input name, email, password, dll -->
+</form>
+
   </script>
 </body>
 </html>

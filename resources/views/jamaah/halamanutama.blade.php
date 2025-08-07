@@ -26,7 +26,7 @@
         <li class="nav-item"><a class="nav-link text-white" href="#galeri">Galeri</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="#kontak">Kontak</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="#lokasi">Lokasi</a></li>
-        <li class="nav-item"><a class="btn btn-light btn-sm ms-3" href="login.html">🔐 Login</a></li>
+        <li class="nav-item"><a class="btn btn-light btn-sm ms-3" href="/login">🔐 Login</a></li>
       </ul>
     </div>
   </div>
