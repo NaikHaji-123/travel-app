@@ -37,7 +37,7 @@
   <div class="container">
     <h1 class="display-4" data-aos="fade-down">Selamat Datang di PT Syakirasya</h1>
     <p class="lead" data-aos="fade-up">Perjalanan Haji dan Umrah dengan pelayanan terbaik & terpercaya</p>
-    <a href="#booking" class="btn btn-success btn-lg rounded-pill mt-3" data-aos="zoom-in">🛫 Booking Sekarang</a>
+    <a href="{{ route('booking') }}" class="btn btn-success btn-lg rounded-pill mt-3" data-aos="zoom-in">🛫 Booking Sekarang</a>
   </div>
 </section>
 

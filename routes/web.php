@@ -10,6 +10,12 @@ Route::get('/', function () {
     return view('jamaah.halamanutama');
 }); 
 
+// HALAMAN BOOKING SEKARANG
+Route::get('/booking', function () {
+    return view('jamaah.booking');
+})->name('booking');
+
+
 // HALAMAN REGISTER JAMAAH
 Route::get('/jamaah/register', [AuthController::class, 'showRegisterForm'])->name('register');
 
