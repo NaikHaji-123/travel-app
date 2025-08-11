@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,7 +7,7 @@
   <title>PT Syakirasya - Travel Haji & Umrah</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 </head>
@@ -26,7 +27,15 @@
         <li class="nav-item"><a class="nav-link text-white" href="#galeri">Galeri</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="#kontak">Kontak</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="#lokasi">Lokasi</a></li>
-        <li class="nav-item"><a class="btn btn-light btn-sm ms-3" href="/login">🔐 Login</a></li>
+
+        @auth
+          <form action="{{ route('logout') }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="btn btn-light btn-sm ms-3">🔒 Logout</button>
+          </form>
+        @else
+          <li class="nav-item"><a class="btn btn-light btn-sm ms-3" href="{{ route('login') }}">🔐 Login</a></li>
+        @endauth
       </ul>
     </div>
   </div>
@@ -56,30 +65,29 @@
   <div class="container">
     <h2>Paket Haji & Umrah</h2>
     <div class="paket-scroll-container">
-      <!-- Paket Card -->
       <div class="paket-card">
-        <img src="img/umrah1.jpg" alt="Umrah Reguler" />
+        <img src="{{ asset('img/umrah1.jpg') }}" alt="Umrah Reguler" />
         <h3>Umrah Reguler 9 Hari</h3>
         <p>Rp 28.000.000</p>
-        <a href="paket-umrah-reguler.html" class="btn-detail">Detail</a>
+        <a href="{{ url('paket-umrah-reguler') }}" class="btn-detail">Detail</a>
       </div>
       <div class="paket-card">
-        <img src="img/umrah2.jpg" alt="Umrah Turki" />
+        <img src="{{ asset('img/umrah2.jpg') }}" alt="Umrah Turki" />
         <h3>Umrah Plus Turki 12 Hari</h3>
         <p>Rp 35.000.000</p>
-        <a href="paket-umrah-turki.html" class="btn-detail">Detail</a>
+        <a href="{{ url('paket-umrah-turki') }}" class="btn-detail">Detail</a>
       </div>
       <div class="paket-card">
-        <img src="img/umrah3.jpg" alt="Haji Khusus" />
+        <img src="{{ asset('img/umrah3.jpg') }}" alt="Haji Khusus" />
         <h3>Haji Khusus ONH Plus</h3>
         <p>Kuota Terbatas</p>
-        <a href="paket-haji-khusus.html" class="btn-detail">Detail</a>
+        <a href="{{ url('paket-haji-khusus') }}" class="btn-detail">Detail</a>
       </div>
       <div class="paket-card">
-        <img src="img/umrah4.jpg" alt="Umrah Ramadhan" />
+        <img src="{{ asset('img/umrah4.jpg') }}" alt="Umrah Ramadhan" />
         <h3>Umrah Ramadhan 10 Hari</h3>
         <p>Rp 32.000.000</p>
-        <a href="paket-umrah-ramadhan.html" class="btn-detail">Detail</a>
+        <a href="{{ url('paket-umrah-ramadhan') }}" class="btn-detail">Detail</a>
       </div>
     </div>
   </div>
@@ -101,22 +109,22 @@
     <h2 class="mb-4">Kenapa Memilih Kami?</h2>
     <div class="row g-4">
       <div class="col-md-3">
-        <img src="img/ikon1.png" height="60" alt="" />
+        <img src="{{ asset('img/ikon1.png') }}" height="60" alt="" />
         <h5 class="mt-3">Resmi & Terdaftar</h5>
         <p>Agen Umrah & Haji resmi Kemenag RI</p>
       </div>
       <div class="col-md-3">
-        <img src="img/ikon2.png" height="60" alt="" />
+        <img src="{{ asset('img/ikon2.png') }}" height="60" alt="" />
         <h5 class="mt-3">Bimbingan Lengkap</h5>
         <p>Pembimbing ibadah profesional dan berpengalaman</p>
       </div>
       <div class="col-md-3">
-        <img src="img/ikon3.png" height="60" alt="" />
+        <img src="{{ asset('img/ikon3.png') }}" height="60" alt="" />
         <h5 class="mt-3">Hotel Nyaman</h5>
         <p>Akomodasi dekat Masjidil Haram dan Nabawi</p>
       </div>
       <div class="col-md-3">
-        <img src="img/ikon4.png" height="60" alt="" />
+        <img src="{{ asset('img/ikon4.png') }}" height="60" alt="" />
         <h5 class="mt-3">Harga Transparan</h5>
         <p>Tanpa biaya tersembunyi, sesuai paket</p>
       </div>
@@ -129,26 +137,13 @@
   <div class="container text-center">
     <h2 class="mb-4">Galeri</h2>
     <div class="row justify-content-center g-3">
-      <div class="col-6 col-md-3">
-        <a href="img/galeri1.jpg" data-lightbox="galeri" data-title="Umrah 1">
-          <img src="img/galeri1.jpg" class="img-fluid rounded shadow-sm" alt="Umrah 1" />
-        </a>
-      </div>
-      <div class="col-6 col-md-3">
-        <a href="img/galeri2.jpg" data-lightbox="galeri" data-title="Umrah 2">
-          <img src="img/galeri2.jpg" class="img-fluid rounded shadow-sm" alt="Umrah 2" />
-        </a>
-      </div>
-      <div class="col-6 col-md-3">
-        <a href="img/galeri3.jpg" data-lightbox="galeri" data-title="Umrah 3">
-          <img src="img/galeri3.jpg" class="img-fluid rounded shadow-sm" alt="Umrah 3" />
-        </a>
-      </div>
-      <div class="col-6 col-md-3">
-        <a href="img/galeri4.jpg" data-lightbox="galeri" data-title="Umrah 4">
-          <img src="img/galeri4.jpg" class="img-fluid rounded shadow-sm" alt="Umrah 4" />
-        </a>
-      </div>
+      @for ($i = 1; $i <= 4; $i++)
+        <div class="col-6 col-md-3">
+          <a href="{{ asset("img/galeri$i.jpg") }}" data-lightbox="galeri" data-title="Umrah {{ $i }}">
+            <img src="{{ asset("img/galeri$i.jpg") }}" class="img-fluid rounded shadow-sm" alt="Umrah {{ $i }}" />
+          </a>
+        </div>
+      @endfor
     </div>
   </div>
 </section>
@@ -205,9 +200,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>AOS.init();</script>
-<script src="js/script.js"></script>
+<script src="{{ asset('js/script.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
-<!-- Tombol WhatsApp Mengambang -->
+
+<!-- WhatsApp Floating -->
 <a href="https://wa.me/6282134493486?text=Assalamu%20alaikum%20saya%20ingin%20bertanya%20tentang%20travel%20umrah"
    class="floating-whatsapp"
    target="_blank">

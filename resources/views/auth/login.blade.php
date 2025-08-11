@@ -31,56 +31,40 @@
       <div class="col-md-5">
         <div class="card p-4">
           <div class="text-center mb-4">
-            <img src="img/logo.png" alt="Logo Syakirasya" height="60" />
+            <img src="{{ asset('img/logo.png') }}" alt="Logo Syakirasya" height="60" />
             <h5 class="mt-2">Login Jamaah</h5>
             <p class="text-muted small">Silakan masuk untuk melihat data keberangkatan Anda.</p>
           </div>
-          <form onsubmit="return loginUser(event);">
+
+          {{-- Form Login --}}
+          <form action="{{ route('login') }}" method="POST">
+            @csrf
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="email" placeholder="Email atau Username" required />
+              <input type="text" class="form-control" name="email" placeholder="Email atau Username" required value="{{ old('email') }}" />
               <label for="email"><i class="bi bi-person-circle me-2"></i>Email / Username</label>
             </div>
             <div class="form-floating mb-4">
-              <input type="password" class="form-control" id="password" placeholder="Kata Sandi" required />
+              <input type="password" class="form-control" name="password" placeholder="Kata Sandi" required />
               <label for="password"><i class="bi bi-lock me-2"></i>Kata Sandi</label>
             </div>
+
+            @if($errors->any())
+              <div class="alert alert-danger py-2">
+                {{ $errors->first() }}
+              </div>
+            @endif
+
             <div class="d-grid">
               <button type="submit" class="btn btn-success">Masuk</button>
             </div>
             <p class="text-center mt-3">
-              Belum punya akun? <a href="jamaah/register">Daftar di sini</a>
+              Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a>
             </p>
           </form>
+
         </div>
       </div>
     </div>
   </div>
-
-  <script>
-    function loginUser(event) {
-      event.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      // Simulasi akun admin
-      if (email === "baraganteng@gmail.com" && password === "123456") {
-        localStorage.setItem("login", "true");
-        localStorage.setItem("role", "admin");
-        window.location.href = "admin/dashboard";
-        return;
-      }
-
-      // Simulasi akun jamaah
-      if (email === "mukhlis@gmail.com" && password === "123456") {
-        localStorage.setItem("login", "true");
-        localStorage.setItem("nama", "Ahmad Fauzi");
-        localStorage.setItem("role", "jamaah");
-        window.location.href = "jamaah/portal";
-        return;
-      }
-
-      alert("Email atau password salah!");
-    }
-  </script>
 </body>
 </html>
