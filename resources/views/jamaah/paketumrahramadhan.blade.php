@@ -27,7 +27,7 @@
               <li class="nav-item">
                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                   @csrf
-                  <button type="submit" class="btn btn-outline-secondary btn-sm ms-2">Logout</button>
+                  <button type="submit" class="btn btn-outline-secondary btn-sm ms-2">Login</button>
                 </form>
               </li>
             @else

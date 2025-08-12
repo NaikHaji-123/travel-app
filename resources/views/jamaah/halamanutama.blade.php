@@ -13,41 +13,77 @@
 </head>
 <body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1A5D1A;">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
   <div class="container">
-    <a class="navbar-brand" href="#">PT SYAKIRASYA</a>
+    <!-- Brand / Logo -->
+    <a class="navbar-brand fw-bold" href="#">
+      <img src="{{ asset('img/logo.png') }}" alt="Logo" height="30" class="me-2">
+      PT SYAKIRASYA
+    </a>
+
+    <!-- Toggle Button (Mobile) -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link text-white" href="#beranda">Beranda</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#tentang">Tentang</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#paket">Paket</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#galeri">Galeri</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#kontak">Kontak</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#lokasi">Lokasi</a></li>
 
+    <!-- Menu -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link {{ request()->is('/') ? 'active fw-bold text-warning' : 'text-white' }}" href="#beranda">Beranda</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#tentang">Tentang</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#paket">Paket</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#galeri">Galeri</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#kontak">Kontak</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#lokasi">Lokasi</a>
+        </li>
+
+        <!-- Auth Button -->
         @auth
           <form action="{{ route('logout') }}" method="POST" class="d-inline">
             @csrf
-            <button type="submit" class="btn btn-light btn-sm ms-3">🔒 Logout</button>
+            <button type="submit" class="btn btn-light btn-sm ms-3">🚪 Login</button>
           </form>
         @else
-          <li class="nav-item"><a class="btn btn-light btn-sm ms-3" href="{{ route('login') }}">🔐 Login</a></li>
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm ms-3" href="{{ route('login') }}">🔐 Login</a>
+          </li>
         @endauth
       </ul>
     </div>
   </div>
 </nav>
-
 <!-- Hero Section -->
-<section id="beranda" class="text-white text-center d-flex align-items-center justify-content-center" style="height: 100vh; background-color: #1A5D1A;">
-  <div class="container">
-    <h1 class="display-4" data-aos="fade-down">Selamat Datang di PT Syakirasya</h1>
-    <p class="lead" data-aos="fade-up">Perjalanan Haji dan Umrah dengan pelayanan terbaik & terpercaya</p>
-    <a href="{{ route('booking') }}" class="btn btn-success btn-lg rounded-pill mt-3" data-aos="zoom-in">🛫 Booking Sekarang</a>
+<section id="beranda" 
+         class="d-flex align-items-center" 
+         style="height: 100vh; background: url('{{ asset('img/mekkah.jpg') }}') center/cover no-repeat; position: relative;">
+
+  <!-- Overlay gradasi -->
+  <div style="position: absolute; top:0; left:0; width:100%; height:100%;
+              background: linear-gradient(to right, rgba(26,93,26,0.85), rgba(26,93,26,0.3), rgba(26,93,26,0));">
   </div>
+
+  <!-- Konten -->
+  <div class="container position-relative text-white" style="z-index: 2;">
+    <div class="row">
+      <div class="col-md-6" data-aos="fade-right">
+        <h1 class="display-4 fw-bold">Selamat Datang di PT Syakirasya</h1>
+        <p class="lead">Perjalanan Haji dan Umrah dengan pelayanan terbaik & terpercaya</p>
+        <a href="{{ route('booking') }}" class="btn btn-success btn-lg rounded-pill mt-3">🛫 Booking Sekarang</a>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <!-- Tentang -->
@@ -155,6 +191,8 @@
     <p><strong>Alamat:</strong> Jl. Contoh No.123, Jakarta</p>
     <p><strong>Telepon:</strong> 0812-3456-7890</p>
     <p><strong>Email:</strong> info@syakirasya.co.id</p>
+  <!-- lokasi -->
+    <section id="lokasi" class="section">
     <div class="map-container">
       <iframe
         src="https://www.google.com/maps?q=Jl.%20Raya%20Mauk%20KM%2012%20Kosambi%20Sukadiri%20Tangerang&output=embed"
@@ -171,15 +209,15 @@
     <div class="testimoni-wrapper">
       <div class="testimoni-box" data-aos="fade-up">
         <p>"Alhamdulillah, pelayanan selama Umrah sangat memuaskan. Terima kasih Syakirasya!"</p>
-        <h4>🌟 Ibu Rina - Jakarta</h4>
+        <h4>🌟 Ibu Ningih - Tangerang</h4>
       </div>
       <div class="testimoni-box" data-aos="fade-up">
         <p>"Tim pembimbing sangat sabar dan berpengalaman. Perjalanan ibadah kami jadi lancar."</p>
-        <h4>🌟 Pak Hendra - Bandung</h4>
+        <h4>🌟 Pak Ujang - Tangerang</h4>
       </div>
       <div class="testimoni-box" data-aos="fade-up">
         <p>"Hotel nyaman, makanan enak, dan jadwal tertib. Saya akan rekomendasikan ke keluarga."</p>
-        <h4>🌟 Ibu Lilis - Tangerang</h4>
+        <h4>🌟 Pak Deripin - Tangerang</h4>
       </div>
     </div>
   </div>

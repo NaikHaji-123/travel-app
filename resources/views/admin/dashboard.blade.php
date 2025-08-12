@@ -262,15 +262,16 @@
     function logout() {
       alert('Anda telah logout.');
       window.location.href = 'login.html';
-    }
     
-  function logout() {
-    // Hapus status login (misalnya pakai localStorage)
-    localStorage.removeItem("login");
+    
+<form action="{{ route('logout') }}" method="POST" class="mt-auto">
+    @csrf
+    <button type="submit" class="nav-link text-danger btn btn-link p-0" style="text-decoration:none;">
+        🚪 Logout
+    </button>
+</form>
 
-    // Redirect ke halaman login
-    window.location.href = "login.html";
-  }
+  
   </script>
 </body>
 </html>

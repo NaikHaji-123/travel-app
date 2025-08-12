@@ -10,11 +10,11 @@ use App\Http\Controllers\PendaftaranController;
 // HALAMAN UTAMA
 Route::get('/', function () {
     return view('jamaah.halamanutama');
-})->name('home'); // Tambahin name('home')
+})->name('home');
 
 Route::get('/booking', function () {
     return view('jamaah.booking');
-})->name('booking');
+})->middleware('auth')->name('booking');
 
 // =======================
 // AUTH (REGISTER, LOGIN, LOGOUT)
@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
 // =======================
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', function () {
-        return view('dashboard_admin');
+        return view('admin.dashboard');
     })->name('admin.dashboard');
 
     Route::get('/admin/pendaftar', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
@@ -71,3 +71,6 @@ Route::get('/paket-haji-khusus', function () {
 Route::get('/paket-umrah-ramadhan', function () {
     return view('jamaah.paketumrahramadhan');
 })->name('paket.umrah.ramadhan');
+// Register
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
