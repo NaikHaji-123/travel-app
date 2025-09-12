@@ -1,230 +1,92 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard Jamaah - PT Syakirasya</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f8f9fa;
-    }
-    .navbar {
-      background-color: #1A5D1A;
-    }
-    .navbar-brand, .navbar-nav .nav-link {
-      color: white !important;
-    }
-    .card {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .section-title {
-      margin-top: 40px;
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
-    .timeline {
-      position: relative;
-      padding-left: 30px;
-    }
-    .timeline::before {
-      content: "";
-      position: absolute;
-      left: 10px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background-color: #1A5D1A;
-    }
-    .timeline-item {
-      position: relative;
-      margin-bottom: 20px;
-    }
-    .timeline-item::before {
-      content: "";
-      position: absolute;
-      left: -2px;
-      top: 0;
-      width: 12px;
-      height: 12px;
-      background-color: #1A5D1A;
-      border-radius: 50%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Jamaah</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .dashboard-header {
+            background: linear-gradient(90deg, #198754, #20c997);
+            color: #fff;
+            padding: 2rem 1rem;
+            border-radius: .5rem;
+        }
+        .card-info p {
+            margin-bottom: .5rem;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="#">PT Syakirasya</a>
-    <div class="ms-auto">
-      <span class="text-white me-3">Halo, Jamaah!</span>
-      <form action="{{ route('logout') }}" method="POST" class="d-inline">
-    @csrf
-    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-</form>
+<div class="container my-4">
+    {{-- Header --}}
+    <div class="dashboard-header mb-4 text-center">
+        <h2 class="mb-0">Selamat Datang, {{ $user->name }}</h2>
+        <p class="lead mt-2">Dashboard Jamaah – Pantau pendaftaran dan riwayat perjalanan haji Anda</p>
     </div>
-  </div>
-</nav>
 
-<!-- Content -->
-<div class="container py-4">
-  <h4 class="mb-3">📋 Dashboard Jamaah</h4>
-
-  <!-- Alert Pengumuman -->
-  <div class="alert alert-info" role="alert">
-    📢 Manasik Umrah akan dilaksanakan pada <strong>30 Agustus 2025</strong> secara offline di Aula Masjid Besar.
-  </div>
-
-  <!-- Profil Jamaah -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5>👤 Profil Anda</h5>
-      <div class="row">
-        <div class="col-md-4">
-          <p><strong>Nama:</strong> MUKHLIS</p>
-          <p><strong>Email:</strong> mukhlis@mail.com</p>
+    {{-- Informasi Pendaftaran Terbaru --}}
+    <h4 class="mb-3">📌 Pendaftaran Terbaru</h4>
+    @if($pendaftaran)
+        <div class="card shadow-sm mb-4">
+            <div class="card-body card-info">
+                <p><strong>Paket:</strong> {{ $pendaftaran->paketTravel->nama ?? '-' }}</p>
+                <p><strong>Tanggal Berangkat:</strong>
+                    {{ optional($pendaftaran->paketTravel->tanggal_berangkat)->format('d F Y') ?? '-' }}
+                </p>
+                <p><strong>Status:</strong> 
+                    <span class="badge bg-primary">{{ $pendaftaran->status ?? '-' }}</span>
+                </p>
+                <p><strong>Total Bayar:</strong>
+                    <span class="text-success fw-bold">
+                        Rp {{ number_format($pendaftaran->pembayaran->jumlah ?? 0, 0, ',', '.') }}
+                    </span>
+                </p>
+            </div>
         </div>
-        <div class="col-md-4">
-          <p><strong>No HP:</strong> 08123456789</p>
-          <p><strong>Tanggal Daftar:</strong> 20 Juli 2025</p>
+    @else
+        <div class="alert alert-warning">Belum ada pendaftaran.</div>
+        <a href="{{ url('/#paket') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Daftar Sekarang
+        </a>
+    @endif
+
+    <hr class="my-5">
+
+    {{-- Riwayat Pendaftaran --}}
+    <h4 class="mb-3">📜 Riwayat Pendaftaran</h4>
+    @if($riwayat->count())
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered align-middle">
+                <thead class="table-success">
+                    <tr class="text-center">
+                        <th>Paket</th>
+                        <th>Tanggal Berangkat</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($riwayat as $r)
+                        <tr>
+                            <td>{{ $r->paketTravel->nama ?? '-' }}</td>
+                            <td>{{ optional($r->paketTravel->tanggal_berangkat)->format('d F Y') ?? '-' }}</td>
+                            <td>
+                                <span class="badge bg-secondary">{{ $r->status ?? '-' }}</span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        <div class="col-md-4 text-end">
-          <a href="#" class="btn btn-outline-success btn-sm">✏️ Edit Profil</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Paket Umrah -->
-  <h5 class="section-title">🧳 Paket Anda</h5>
-  <div class="card mb-3">
-    <div class="card-body">
-      <p><strong>Nama Paket:</strong> Umrah Plus Turki</p>
-      <p><strong>Harga:</strong> Rp 38.000.000</p>
-      <p><strong>Keberangkatan:</strong> 15 September 2025</p>
-      <a href="#" class="btn btn-primary btn-sm">📄 Cetak Invoice</a>
-    </div>
-  </div>
-
-  <!-- Status Pembayaran -->
-  <h5 class="section-title">💳 Pembayaran</h5>
-  <div class="card mb-3">
-    <div class="card-body">
-      <p><strong>Status:</strong> <span class="badge bg-warning text-dark">Menunggu Konfirmasi</span></p>
-      <p><strong>Bukti Transfer:</strong> <a href="#" class="btn btn-link btn-sm">Lihat</a></p>
-      <a href="#" class="btn btn-success btn-sm">📤 Upload Bukti Baru</a>
-    </div>
-  </div>
-
-  <!-- Riwayat Paket -->
-  <h5 class="section-title">📚 Riwayat Pendaftaran</h5>
-  <div class="card mb-3">
-    <div class="card-body">
-      <table class="table table-bordered">
-        <thead class="table-success">
-          <tr>
-            <th>Paket</th>
-            <th>Tanggal</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Umrah Reguler</td>
-            <td>15 Januari 2025</td>
-            <td><span class="badge bg-success">Selesai</span></td>
-          </tr>
-          <tr>
-            <td>Umrah Plus Turki</td>
-            <td>20 Juli 2025</td>
-            <td><span class="badge bg-warning text-dark">Menunggu</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Timeline Perjalanan -->
-  <h5 class="section-title">🕓 Timeline Keberangkatan</h5>
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="timeline">
-        <div class="timeline-item">
-          <p><strong>20 Juli 2025</strong> - Pendaftaran dan Pembayaran</p>
-        </div>
-        <div class="timeline-item">
-          <p><strong>30 Agustus 2025</strong> - Manasik Umrah</p>
-        </div>
-        <div class="timeline-item">
-          <p><strong>15 September 2025</strong> - Keberangkatan</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Progress Keberangkatan -->
-  <h5 class="section-title">📊 Progress Keberangkatan</h5>
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="progress mb-2">
-        <div class="progress-bar bg-success" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
-          70% - Persiapan Berjalan
-        </div>
-      </div>
-      <small>Status saat ini: Sudah Manasik</small>
-    </div>
-  </div>
-
-  <!-- Countdown Keberangkatan -->
-  <h5 class="section-title">🕒 Countdown Keberangkatan</h5>
-  <div class="card mb-3">
-    <div class="card-body">
-      <p id="countdown" class="fs-5 text-success fw-semibold"></p>
-    </div>
-  </div>
-
-  <!-- Bantuan -->
-  <h5 class="section-title">❓ FAQ & Bantuan</h5>
-  <div class="card mb-5">
-    <div class="card-body">
-      <p><strong>Belum menerima konfirmasi?</strong> Silakan hubungi admin melalui WhatsApp: <a href="https://wa.me/6281234567890" class="btn btn-outline-success btn-sm">Chat Admin</a></p>
-      <p><strong>Masalah pembayaran?</strong> Kirim ulang bukti melalui halaman <em>Pembayaran</em>.</p>
-    </div>
-  </div>
-
+    @else
+        <p class="text-muted">Tidak ada riwayat pendaftaran.</p>
+    @endif
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const keberangkatan = new Date("2025-09-15T00:00:00").getTime();
-  const timer = setInterval(function() {
-    const now = new Date().getTime();
-    const selisih = keberangkatan - now;
-
-    const hari = Math.floor(selisih / (1000 * 60 * 60 * 24));
-    const jam = Math.floor((selisih % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const menit = Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60));
-
-    document.getElementById("countdown").innerHTML = `Tinggal ${hari} hari ${jam} jam ${menit} menit lagi`;
-
-    if (selisih < 0) {
-      clearInterval(timer);
-      document.getElementById("countdown").innerHTML = "Sudah Berangkat!";
-    }
-  }, 1000);
-  function logout() {
-    // Hapus status login (misalnya pakai localStorage)
-    localStorage.removeItem("login");
-
-    // Redirect ke halaman login
-    window.location.href = "{{ route('login') }}";
-  }
-</script>
 </body>
 </html>

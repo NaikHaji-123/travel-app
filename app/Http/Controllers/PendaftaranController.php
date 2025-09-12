@@ -2,70 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Pendaftaran;
-use App\Models\Verifikasi;
-use Illuminate\Support\Facades\Auth;
+use App\Models\PaketTravel;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class PendaftaranController extends Controller
 {
-    // 1. Jamaah: Menyimpan pendaftaran baru
+    // Tampilkan semua pendaftaran
+    public function index()
+    {
+        $pendaftarans = Pendaftaran::with(['user', 'paketTravel', 'verifikasi'])->get();
+        return view('pendaftaran.index', compact('pendaftarans'));
+    }
+
+    // Form tambah pendaftaran
+    public function create()
+    {
+        $users = User::all();
+        $paketTravels = PaketTravel::all();
+        return view('pendaftaran.create', compact('users', 'paketTravels'));
+    }
+
+    // Simpan pendaftaran baru
     public function store(Request $request)
     {
         $request->validate([
-            'paket_travel_id' => 'required|exists:paket_travels,id',
+            'user_id' => 'required',
+            'paket_travel_id' => 'required',
+            'status' => 'required',
         ]);
 
-        $pendaftaran = Pendaftaran::create([
-            'user_id' => Auth::id(),
-            'paket_travel_id' => $request->paket_travel_id,
-            'status' => 'pending',
-        ]);
+        Pendaftaran::create($request->all());
 
-        return response()->json([
-            'message' => 'Pendaftaran berhasil dikirim',
-            'data' => $pendaftaran,
-        ]);
+        return redirect()->route('pendaftaran.index')->with('success', 'Pendaftaran berhasil ditambahkan.');
     }
 
-    // 2. Jamaah: Melihat status pendaftarannya
-    public function indexUser()
+    // Edit pendaftaran
+    public function edit(Pendaftaran $pendaftaran)
     {
-        $pendaftarans = Pendaftaran::with('paketTravel')
-            ->where('user_id', Auth::id())
-            ->get();
-
-        return response()->json($pendaftarans);
+        $users = User::all();
+        $paketTravels = PaketTravel::all();
+        return view('pendaftaran.edit', compact('pendaftaran', 'users', 'paketTravels'));
     }
 
-    // 3. Admin: Melihat semua data pendaftaran
-    public function index()
-    {
-        $pendaftarans = Pendaftaran::with(['user', 'paketTravel'])->get();
-        return response()->json($pendaftarans);
-    }
-
-    // 4. Admin: Memverifikasi pendaftaran
-    public function verifikasi(Request $request, $id)
+    // Update pendaftaran
+    public function update(Request $request, Pendaftaran $pendaftaran)
     {
         $request->validate([
-            'status' => 'required|in:diterima,ditolak',
-            'catatan' => 'nullable|string',
+            'status' => 'required',
         ]);
 
-        $pendaftaran = Pendaftaran::findOrFail($id);
-        $pendaftaran->status = $request->status;
-        $pendaftaran->save();
+        $pendaftaran->update($request->all());
 
-        Verifikasi::create([
-            'pendaftaran_id' => $id,
-            'status' => $request->status,
-            'catatan' => $request->catatan,
-        ]);
+        return redirect()->route('pendaftaran.index')->with('success', 'Pendaftaran berhasil diperbarui.');
+    }
 
-        return response()->json([
-            'message' => 'Pendaftaran berhasil diverifikasi',
-            'data' => $pendaftaran
-        ]);
+    // Hapus pendaftaran
+    public function destroy(Pendaftaran $pendaftaran)
+    {
+        $pendaftaran->delete();
+        return redirect()->route('pendaftaran.index')->with('success', 'Pendaftaran berhasil dihapus.');
     }
 }

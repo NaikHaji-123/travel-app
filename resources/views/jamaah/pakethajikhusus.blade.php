@@ -72,23 +72,25 @@
   <!-- Hero Section -->
   <main class="container py-5">
     <section class="text-center">
-      <h2 class="fw-bold mb-3">Haji Khusus ONH Plus</h2>
+      <h2 class="fw-bold mb-3">Umrah Massal 12 Hari</h2>
       <img src="{{ asset('img/umrah3.jpg') }}" alt="Haji Khusus" class="hero-img shadow-sm" style="width:300px;" />
-      <p class="mt-3 text-danger fw-bold">Kuota Terbatas!</p>
-      <p class="fs-5"><strong>Harga:</strong> Rp 125.000.000</p>
-      <p><strong>Durasi:</strong> 25 Hari (Madinah - Mekkah - Mina - Arafah)</p>
-      <p><strong>Jadwal Keberangkatan:</strong> Juli - Agustus 2025</p>
+      <p class="fs-5"><strong>Harga:</strong> Rp 25.000.000</p>
+      
+      <p><strong>Jadwal Keberangkatan:</strong> OKTOBER 2025</p>
 
       <!-- Fasilitas -->
       <div class="row justify-content-center mt-4">
         <div class="col-md-6">
           <ul class="facility-list list-unstyled text-start">
-            <li>✅ Izin resmi PIHK (Kemenag RI)</li>
-            <li>🕋 Akomodasi dekat Masjidil Haram</li>
-            <li>📜 Manasik & bimbingan intensif</li>
-            <li>🚌 Maktab Mina-Arafah full fasilitas</li>
-            <li>💼 Konsultan perjalanan khusus keluarga</li>
-          </ul>
+        <li>✨ Nikmati perjalanan ibadah penuh kenyamanan</li>
+        <li>✈️ ✔️ Tiket pesawat PP kelas ekonomi</li>
+        <li>🍽  ✔️ Makan 3x Sehari</li>
+        <li>🏨 ✔️ Hotel bintang 3 (dekat Masjidil Haram)</li>
+        <li>🚌 ✔️ Full bus AC & city tour</li>
+        <li>✔️ Harga hanya 23.5 Juta</li>
+        <li>🎁 Gratis: Kereta Cepat & City Tour Thaif</li>
+        <li>📞 Segera hubungi kami & amankan kursi sahabat sekarang dengan menghubungi https://desty.page/syakirasyagroup. Atau silahakan datang langsung ke kantor kami di Jl. Raya Mauk km.12 no.98 desa Kosambi kecamatan Sukadiri kabupaten Tangerang</li>
+      </ul>
         </div>
       </div>
 
@@ -97,7 +99,7 @@
         <button class="btn btn-success btn-lg" onclick="setPaketAndBooking('Haji Khusus ONH Plus')">
           Booking Sekarang
         </button>
-        <a href="https://wa.me/6281234567890?text=Saya%20ingin%20bertanya%20tentang%20Haji%20Khusus" 
+        <a href="https://wa.me/6281295730907?text=Saya%20ingin%20bertanya%20tentang%20Haji%20Khusus" 
            class="btn btn-outline-primary btn-lg ms-2">
           💬 Tanya Admin
         </a>

@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaketTravel extends Model
 {
+    protected $table = 'paket_travels'; // ✅ tambahkan ini
+    
     protected $fillable = [
         'nama_paket',
         'deskripsi',

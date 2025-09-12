@@ -41,21 +41,23 @@
 
   <main class="container py-5">
     <section class="text-center">
-      <h2>Umrah Reguler 9 Hari</h2>
+      <h2>Umrah Akhir Tahun 2025 </h2>
       <img src="{{ asset('img/umrah1.jpg') }}" alt="Umrah Reguler" style="width:300px; border-radius:12px;" />
-      <p class="mt-3">Harga: <strong>Rp 28.000.000</strong></p>
+      <p class="mt-3">Harga: <strong>Rp 29.000.000</strong></p>
 
       <ul style="text-align:left; max-width:600px; margin:auto;">
-        <li>✈️ Tiket Pesawat PP</li>
-        <li>🏨 Hotel Bintang 4 (dekat Masjidil Haram)</li>
-        <li>🍽️ Makan 3x sehari</li>
-        <li>🚌 Transportasi AC selama di Arab</li>
-        <li>🕋 Manasik & bimbingan ibadah</li>
+        <li>✨ Nikmati perjalanan ibadah penuh kenyamanan</li>
+        <li>✈️ ✔️ Tiket pesawat PP kelas ekonomi</li>
+        <li>🏨 ✔️ Hotel bintang 3 (dekat Masjidil Haram)</li>
+        <li>🚌 ✔️ Full bus AC & city tour</li>
+        <li>✔️ Harga hanya 29 Juta</li>
+        <li>🎁 Gratis: Kereta Cepat & City Tour Thaif</li>
+        <li>📞 Segera hubungi kami & amankan kursi sahabat sekarang dengan menghubungi https://desty.page/syakirasyagroup. Atau silahakan datang langsung ke kantor kami di Jl. Raya Mauk km.12 no.98 desa Kosambi kecamatan Sukadiri kabupaten Tangerang</li>
       </ul>
 
       <div class="mt-4">
         <button class="btn btn-success" onclick="setPaketAndBooking('Umrah Reguler 9 Hari')">Booking Sekarang</button>
-        <a href="https://wa.me/6281234567890?text=Saya%20ingin%20bertanya%20tentang%20Umrah%20Reguler" class="btn btn-outline-primary ms-2">Tanya Admin</a>
+        <a href="https://wa.me/6281295730907?text=Saya%20ingin%20bertanya%20tentang%20Umrah%20Reguler" class="btn btn-outline-primary ms-2">Tanya Admin</a>
       </div>
     </section>
   </main>

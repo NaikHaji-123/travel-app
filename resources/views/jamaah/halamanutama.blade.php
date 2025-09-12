@@ -12,6 +12,7 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 </head>
 <body>
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
   <div class="container">
@@ -63,6 +64,7 @@
     </div>
   </div>
 </nav>
+
 <!-- Hero Section -->
 <section id="beranda" 
          class="d-flex align-items-center" 
@@ -73,28 +75,71 @@
               background: linear-gradient(to right, rgba(26,93,26,0.85), rgba(26,93,26,0.3), rgba(26,93,26,0));">
   </div>
 
-  <!-- Konten -->
-  <div class="container position-relative text-white" style="z-index: 2;">
-    <div class="row">
-      <div class="col-md-6" data-aos="fade-right">
-        <h1 class="display-4 fw-bold">Selamat Datang di PT Syakirasya</h1>
-        <p class="lead">Perjalanan Haji dan Umrah dengan pelayanan terbaik & terpercaya</p>
-        <a href="{{ route('booking') }}" class="btn btn-success btn-lg rounded-pill mt-3">🛫 Booking Sekarang</a>
-      </div>
+<!-- Konten -->
+<div class="container position-relative text-white" style="z-index: 2;">
+  <div class="row">
+    <div class="col-md-6" data-aos="fade-right">
+      <h1 class="display-4 fw-bold">Selamat Datang di PT Syakirasya</h1>
+      <p class="lead">Perjalanan Haji dan Umrah dengan pelayanan terbaik & terpercaya</p>
+      
+      <!-- Tombol Booking -->
+      <a href="{{ route('booking') }}" class="btn btn-success btn-lg rounded-pill mt-3 me-2">
+        🛫 Booking Sekarang
+      </a>
+
+      <!-- Tombol Hubungi -->
+      <a href="https://wa.me/6281295730907" target="_blank" class="btn btn-primary btn-lg rounded-pill mt-3">
+        📞 Segera Hubungi Kami
+      </a>
     </div>
   </div>
+</div>
+
 
 </section>
 
-<!-- Tentang -->
-<section id="tentang" class="section">
+<!-- Tentang Kami -->
+<section id="tentang" class="py-5">
   <div class="container">
-    <h2>Tentang Kami</h2>
-    <p><strong>PT Syakirasya</strong> adalah perusahaan resmi yang bergerak di bidang jasa perjalanan Umrah dan Haji...</p>
-    <h3>Kantor Pusat</h3>
-    <p>Jl. Raya Mauk KM 12, Desa Kosambi, Sukadiri, Kabupaten Tangerang</p>
+    <div class="row align-items-center">
+      
+      <!-- Kolom Kiri -->
+      <div class="col-md-6 mb-4">
+        <h2 class="text-success fw-bold">Tentang Kami</h2>
+        <p>
+          <strong>PT Syakirasya</strong> adalah perusahaan resmi yang bergerak di bidang jasa perjalanan
+          <span class="fw-bold text-success">Umrah dan Haji</span>. 
+          Kami berkomitmen memberikan pelayanan terbaik, aman, dan nyaman 
+          untuk setiap jamaah yang ingin menunaikan ibadah suci.
+        </p>
+
+        <!-- Highlight Box -->
+        <div class="highlight-box">
+          <strong>✅ Sudah Berizin Resmi</strong><br>
+          IZIN 02090100218880001 - Tahun 2023 (Kemenag RI)
+        </div>
+
+        <!-- Checklist Poin -->
+        <ul class="list-unstyled text-start mt-3">
+          <li>✨ <strong>Berpengalaman</strong> lebih dari 10 tahun melayani jamaah</li>
+          <li>🕌 <strong>Fasilitas Nyaman</strong> mulai dari akomodasi hingga transportasi</li>
+          <li>📑 <strong>Legalitas Terjamin</strong> resmi terdaftar di Kementerian Agama</li>
+        </ul>
+
+        <h5 class="mt-4 text-success">Kantor Pusat</h5>
+        <p>Jl. Raya Mauk KM 12, Desa Kosambi, Sukadiri, Kabupaten Tangerang</p>
+      </div>
+
+      <!-- Kolom Kanan -->
+      <div class="col-md-6 text-center">
+        <img src="{{ asset('img/Tentang.jpg') }}" alt="Tentang Kami">
+      </div>
+
+    </div>
   </div>
 </section>
+
+
 
 <!-- Paket -->
 <section id="paket" class="section">
@@ -103,26 +148,26 @@
     <div class="paket-scroll-container">
       <div class="paket-card">
         <img src="{{ asset('img/umrah1.jpg') }}" alt="Umrah Reguler" />
-        <h3>Umrah Reguler 9 Hari</h3>
-        <p>Rp 28.000.000</p>
+        <h3>Umrah Akhir Tahun 2025</h3>
+        <p>Rp 29.000.000</p>
         <a href="{{ url('paket-umrah-reguler') }}" class="btn-detail">Detail</a>
       </div>
       <div class="paket-card">
         <img src="{{ asset('img/umrah2.jpg') }}" alt="Umrah Turki" />
-        <h3>Umrah Plus Turki 12 Hari</h3>
-        <p>Rp 35.000.000</p>
+        <h3>Umrah Plus Thaif</h3>
+        <p>Rp 30.000.000 atau 25.000.000</p>
         <a href="{{ url('paket-umrah-turki') }}" class="btn-detail">Detail</a>
       </div>
       <div class="paket-card">
         <img src="{{ asset('img/umrah3.jpg') }}" alt="Haji Khusus" />
-        <h3>Haji Khusus ONH Plus</h3>
-        <p>Kuota Terbatas</p>
+        <h3>Umrah Massal 12 Hari</h3>
+        <p>25.000.000</p>
         <a href="{{ url('paket-haji-khusus') }}" class="btn-detail">Detail</a>
       </div>
       <div class="paket-card">
         <img src="{{ asset('img/umrah4.jpg') }}" alt="Umrah Ramadhan" />
-        <h3>Umrah Ramadhan 10 Hari</h3>
-        <p>Rp 32.000.000</p>
+        <h3>Umrah UMKM 9 Hari</h3>
+        <p>Rp 23.500.000</p>
         <a href="{{ url('paket-umrah-ramadhan') }}" class="btn-detail">Detail</a>
       </div>
     </div>
@@ -139,44 +184,85 @@
   </div>
 </div>
 
-<!-- Keunggulan -->
-<section id="keunggulan" class="section text-center py-5 bg-white">
-  <div class="container">
-    <h2 class="mb-4">Kenapa Memilih Kami?</h2>
-    <div class="row g-4">
-      <div class="col-md-3">
-        <img src="{{ asset('img/ikon1.png') }}" height="60" alt="" />
-        <h5 class="mt-3">Resmi & Terdaftar</h5>
-        <p>Agen Umrah & Haji resmi Kemenag RI</p>
-      </div>
-      <div class="col-md-3">
-        <img src="{{ asset('img/ikon2.png') }}" height="60" alt="" />
-        <h5 class="mt-3">Bimbingan Lengkap</h5>
-        <p>Pembimbing ibadah profesional dan berpengalaman</p>
-      </div>
-      <div class="col-md-3">
-        <img src="{{ asset('img/ikon3.png') }}" height="60" alt="" />
-        <h5 class="mt-3">Hotel Nyaman</h5>
-        <p>Akomodasi dekat Masjidil Haram dan Nabawi</p>
-      </div>
-      <div class="col-md-3">
-        <img src="{{ asset('img/ikon4.png') }}" height="60" alt="" />
-        <h5 class="mt-3">Harga Transparan</h5>
-        <p>Tanpa biaya tersembunyi, sesuai paket</p>
+<!-- KEUNGGULAN -->
+<section id="keunggulan" class="section py-5">
+  <div class="bg-emas text-center py-5">
+    <h2 class="mb-5 text-white">Kenapa Pilih PT Syakirasya?</h2>
+    <div class="container">
+      <div class="row g-4">
+
+        <!-- Card 1 -->
+        <div class="col-md-4">
+          <div class="card hover-card p-4 h-100 text-center">
+            <img src="{{ asset('img/resmi.svg') }}" height="60" alt="Resmi">
+            <h5 class="mt-3">Resmi & Terdaftar</h5>
+            <p>Agen Umrah & Haji resmi Kemenag RI, aman, dan terpercaya sehingga perjalanan Anda lebih tenang.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4">
+          <div class="card hover-card p-4 h-100 text-center">
+            <img src="{{ asset('img/bimbingan.svg') }}" height="60" alt="Bimbingan">
+            <h5 class="mt-3">Bimbingan Lengkap</h5>
+            <p>Didampingi pembimbing ibadah & berpengalaman yang siap memandu dari awal hingga akhir perjalanan.</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4">
+          <div class="card hover-card p-4 h-100 text-center">
+            <img src="{{ asset('img/hotel.svg') }}" height="60" alt="Hotel">
+            <h5 class="mt-3">Hotel Nyaman</h5>
+            <p>Akomodasi dekat Masjidil Haram & Nabawi.</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="col-md-4">
+          <div class="card hover-card p-4 h-100 text-center">
+            <img src="{{ asset('img/money.svg') }}" height="60" alt="Harga">
+            <h5 class="mt-3">Harga Transparan</h5>
+            <p>Tanpa biaya tersembunyi, sesuai paket yang dipilih. Semua jelas, detail, dan transparan.</p>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="col-md-4">
+          <div class="card hover-card p-4 h-100 text-center">
+            <img src="{{ asset('img/jadwal.svg') }}" height="60" alt="Jadwal">
+            <h5 class="mt-3">Jadwal Fleksibel</h5>
+            <p>Beragam pilihan paket dan jadwal keberangkatan, memudahkan jamaah menyesuaikan dengan waktu yang tersedia.</p>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="col-md-4">
+          <div class="card hover-card p-4 h-100 text-center">
+            <img src="{{ asset('img/jam.svg') }}" height="60" alt="Support">
+            <h5 class="mt-3">Support 24 Jam</h5>
+            <p>Tim support siap membantu jamaah kapanpun diperlukan, baik sebelum, saat, maupun setelah ibadah.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </section>
+
 
 <!-- Galeri -->
 <section id="galeri" class="section bg-light py-5">
   <div class="container text-center">
     <h2 class="mb-4">Galeri</h2>
     <div class="row justify-content-center g-3">
-      @for ($i = 1; $i <= 4; $i++)
-        <div class="col-6 col-md-3">
+      @for ($i = 1; $i <= 9; $i++)
+        <div class="col-6 col-md-3 galeri-item">
           <a href="{{ asset("img/galeri$i.jpg") }}" data-lightbox="galeri" data-title="Umrah {{ $i }}">
-            <img src="{{ asset("img/galeri$i.jpg") }}" class="img-fluid rounded shadow-sm" alt="Umrah {{ $i }}" />
+            <div class="galeri-wrapper">
+              <img src="{{ asset("img/galeri$i.jpg") }}" class="img-fluid" alt="Umrah {{ $i }}" />
+              <div class="overlay"><i class="fas fa-search-plus"></i></div>
+            </div>
           </a>
         </div>
       @endfor
@@ -184,13 +270,46 @@
   </div>
 </section>
 
+
 <!-- Kontak -->
-<section id="kontak" class="section">
+<section id="kontak" class="kontak-section">
   <div class="container">
-    <h2>Kontak Kami</h2>
-    <p><strong>Alamat:</strong> Jl. Contoh No.123, Jakarta</p>
-    <p><strong>Telepon:</strong> 0812-3456-7890</p>
-    <p><strong>Email:</strong> info@syakirasya.co.id</p>
+    <h2 class="kontak-title">Kontak Kami</h2>
+    <div class="kontak-card">
+      <p><i class="fas fa-map-marker-alt"></i> 
+        <strong>Alamat:</strong><br>
+        Jl. Raya Mauk Km.12, Desa Kosambi, Kec.Sukadiri, Kabupaten Tangerang
+      </p>
+      <p><i class="fas fa-phone-alt"></i> 
+        <strong>Telepon:</strong><br>
+        <a href="tel:081295730907">0812-9573-0907</a>
+      </p>
+      <p><i class="fas fa-envelope"></i> 
+        <strong>Email:</strong><br>
+        <a href="mailto:info@syakirasya.co.id">info@syakirasya.co.id</a>
+      </p>
+
+      <!-- Tombol WhatsApp -->
+      <a href="https://wa.me/6281295730907" target="_blank" class="btn-wa">
+        <i class="fab fa-whatsapp"></i> Hubungi Kami via WhatsApp
+      </a>
+
+      <!-- Sosial Media -->
+      <div class="sosmed">
+        <a href="https://instagram.com/syakirasyagroup" target="_blank" class="ig" title="Ikuti Instagram Kami">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://tiktok.com/@syakirasyagroup" target="_blank" class="tt" title="Ikuti TikTok Kami">
+          <i class="fab fa-tiktok"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Font Awesome (harus ada ini di <head>) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
   <!-- lokasi -->
     <section id="lokasi" class="section">
     <div class="map-container">
@@ -242,7 +361,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 
 <!-- WhatsApp Floating -->
-<a href="https://wa.me/6282134493486?text=Assalamu%20alaikum%20saya%20ingin%20bertanya%20tentang%20travel%20umrah"
+<a href="https://wa.me/6281295730907?text=Assalamu%20alaikum%20saya%20ingin%20bertanya%20tentang%20travel%20umrah"
    class="floating-whatsapp"
    target="_blank">
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="wa-icon">

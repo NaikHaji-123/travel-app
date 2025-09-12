@@ -68,30 +68,38 @@
         <a href="#transaksi" class="nav-link" data-bs-toggle="tab">📄 Riwayat Transaksi</a>
         <a href="#laporan" class="nav-link" data-bs-toggle="tab">📊 Laporan</a>
         <a href="#profil" class="nav-link" data-bs-toggle="tab">👤 Profil Admin</a>
-        <a href="#logout" class="nav-link text-danger mt-auto" onclick="logout()">🚪 Logout</a>
+        <form action="{{ route('logout') }}" method="POST" class="mt-auto">
+            @csrf
+            <button type="submit" class="nav-link text-danger btn btn-link p-0 w-100 text-start" style="text-decoration:none;">
+                🚪 Logout
+            </button>
+        </form>
       </nav>
 
       <!-- Main Content -->
       <main class="col-md-10">
         <div class="topbar d-flex justify-content-between align-items-center">
           <h4 class="mb-0">Admin PT Syakirasya</h4>
-          <span class="text-muted">Selamat datang, Admin!</span>
+          <span class="text-muted">Selamat datang, {{ Auth::user()->nama ?? 'Admin' }}!</span>
         </div>
 
         <div class="tab-content px-2">
           <!-- Dashboard -->
           <div class="tab-pane fade show active" id="dashboard">
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              <strong>⚠️ Notifikasi:</strong> Ada 1 pembayaran baru yang menunggu konfirmasi!
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+            @if($pembayaranMenunggu > 0)
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>⚠️ Notifikasi:</strong> Ada {{ $pembayaranMenunggu }} pembayaran baru yang menunggu konfirmasi!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            @endif
+
             <h5>📊 Statistik Singkat</h5>
             <div class="row g-3">
               <div class="col-md-4">
                 <div class="card shadow-sm">
                   <div class="card-body">
                     <h6>Total Paket</h6>
-                    <p class="fs-4 fw-semibold text-success">4</p>
+                    <p class="fs-4 fw-semibold text-success">{{ $totalPaket }}</p>
                   </div>
                 </div>
               </div>
@@ -99,7 +107,7 @@
                 <div class="card shadow-sm">
                   <div class="card-body">
                     <h6>Jumlah Pembayaran</h6>
-                    <p class="fs-4 fw-semibold text-success">12</p>
+                    <p class="fs-4 fw-semibold text-success">{{ $totalPembayaran }}</p>
                   </div>
                 </div>
               </div>
@@ -107,7 +115,7 @@
                 <div class="card shadow-sm">
                   <div class="card-body">
                     <h6>Total Jamaah Aktif</h6>
-                    <p class="fs-4 fw-semibold text-success">8</p>
+                    <p class="fs-4 fw-semibold text-success">{{ $totalJamaah }}</p>
                   </div>
                 </div>
               </div>
@@ -124,16 +132,16 @@
                     <th>Nama Paket</th>
                     <th>Harga</th>
                     <th>Jadwal</th>
-                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
+                  @foreach($pakets as $paket)
                   <tr>
-                    <td>Umrah Reguler</td>
-                    <td>Rp 28.000.000</td>
-                    <td>20 Agustus 2025</td>
-                    <td><button class="btn btn-warning btn-sm">Edit</button></td>
+                    <td>{{ $paket->nama_paket }}</td>
+                    <td>Rp {{ number_format($paket->harga, 0, ',', '.') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($paket->tanggal_berangkat)->format('d M Y') }}</td>
                   </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>
@@ -149,18 +157,25 @@
                     <th>Nama</th>
                     <th>No. HP</th>
                     <th>Paket</th>
-                    <th>Bukti</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
+                  @foreach($pendaftarans as $p)
                   <tr>
-                    <td>BARAGANTENGLUWCU</td>
-                    <td>08123456789</td>
-                    <td>Umrah Reguler</td>
-                    <td><a href="#" class="btn btn-link btn-sm">Lihat Bukti</a></td>
-                    <td><span class="badge bg-warning text-dark">Menunggu</span></td>
+                    <td>{{ $p->user->nama }}</td>
+                    <td>{{ $p->user->no_hp }}</td>
+                    <td>{{ $p->paketTravel->nama_paket }}</td>
+                    <td>
+                      <span class="badge 
+                        @if($p->status == 'lunas') bg-success 
+                        @elseif($p->status == 'menunggu') bg-warning text-dark 
+                        @else bg-secondary @endif">
+                        {{ ucfirst($p->status) }}
+                      </span>
+                    </td>
                   </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>
@@ -180,12 +195,14 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @foreach($jamaah as $j)
                   <tr>
-                    <td>Mukhlis</td>
-                    <td>mukhlis@mail.com</td>
-                    <td>08987654321</td>
+                    <td>{{ $j->nama }}</td>
+                    <td>{{ $j->email }}</td>
+                    <td>{{ $j->no_hp }}</td>
                     <td><span class="badge bg-success">Aktif</span></td>
                   </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>
@@ -201,18 +218,25 @@
                     <th>Tanggal</th>
                     <th>Nama Jamaah</th>
                     <th>Paket</th>
-                    <th>Jumlah</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
+                  @foreach($riwayatTransaksi as $t)
                   <tr>
-                    <td>20/07/2025</td>
-                    <td>BARAGANTENGLUWCU</td>
-                    <td>Umrah Reguler</td>
-                    <td>Rp 28.000.000</td>
-                    <td><span class="badge bg-success">Lunas</span></td>
+                    <td>{{ $t->created_at->format('d/m/Y') }}</td>
+                    <td>{{ $t->user->nama }}</td>
+                    <td>{{ $t->paketTravel->nama_paket }}</td>
+                    <td>
+                      <span class="badge 
+                        @if($t->status == 'lunas') bg-success 
+                        @elseif($t->status == 'menunggu') bg-warning text-dark 
+                        @else bg-secondary @endif">
+                        {{ ucfirst($t->status) }}
+                      </span>
+                    </td>
                   </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>
@@ -229,9 +253,9 @@
           <div class="tab-pane fade" id="profil">
             <h5 class="mt-3">👤 Profil Admin</h5>
             <div class="profile-card">
-              <h5>Nama: baraw</h5>
-              <p>Email: bara@syakirasya.co.id</p>
-              <p>Terakhir Login: 27 Juli 2025</p>
+              <h5>Nama: {{ Auth::user()->nama ?? 'Admin' }}</h5>
+              <p>Email: {{ Auth::user()->email ?? '-' }}</p>
+              <p>Terakhir Login: {{ Auth::user()->last_login ?? '-' }}</p>
               <button class="btn btn-outline-primary btn-sm">Ubah Password</button>
             </div>
           </div>
@@ -258,20 +282,6 @@
         if (targetTab) targetTab.classList.add('show', 'active');
       });
     });
-
-    function logout() {
-      alert('Anda telah logout.');
-      window.location.href = 'login.html';
-    
-    
-<form action="{{ route('logout') }}" method="POST" class="mt-auto">
-    @csrf
-    <button type="submit" class="nav-link text-danger btn btn-link p-0" style="text-decoration:none;">
-        🚪 Logout
-    </button>
-</form>
-
-  
   </script>
 </body>
 </html>
