@@ -6,10 +6,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daftar Jamaah - PT Syakirasya</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .register-box {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .register-box h4 {
+      font-weight: 600;
+      color: #2f7a36;
+    }
+
+    .form-control {
+      border-radius: 10px;
+    }
+
+    .btn-success {
+      border-radius: 10px;
+      padding: 10px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .btn-success:hover {
+      background-color: #2f7a36;
+    }
+
+    .register-box p a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #2f7a36;
+    }
+
+    .register-box p a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
-<body style="background: linear-gradient(135deg, #d4fc79, #96e6a1); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-  <div class="register-box bg-white p-4 rounded shadow">
-    <h4 class="text-center mb-4">Pendaftaran Jamaah</h4>
+<body>
+  <div class="register-box">
+    <div class="text-center mb-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/3065/3065778.png" width="60" alt="icon jamaah">
+      <h4 class="mt-2">Pendaftaran Jamaah</h4>
+    </div>
 
     <form method="POST" action="{{ route('register.post') }}">
       @csrf

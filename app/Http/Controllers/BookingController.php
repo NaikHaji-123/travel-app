@@ -2,35 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Booking;
+use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    /**
-     * Simpan data booking ke database.
-     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama'    => 'required|string|max:255',
-            'hp'      => 'required|string|max:20',
-            'paket'   => 'required|string',
-            'bukti'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'catatan' => 'nullable|string',
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'hp'   => 'required|string|max:20',
+            'paket'=> 'required|string',
+            'bukti'=> 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Simpan file bukti transfer jika ada
+        $filePath = null;
         if ($request->hasFile('bukti')) {
-            $validated['bukti'] = $request->file('bukti')->store('bukti-transfer', 'public');
+            $filePath = $request->file('bukti')->store('bukti_transfer', 'public');
         }
 
-        $validated['user_id'] = auth()->id();
+        Booking::create([
+            'nama'    => $request->nama,
+            'hp'      => $request->hp,
+            'paket'   => $request->paket,
+            'bukti'   => $filePath,
+            'catatan' => $request->catatan,
+        ]);
 
-        Booking::create($validated);
-
-        return redirect()
-            ->route('admin.dashboard')
-            ->with('success', 'Booking berhasil disimpan.');
+        return redirect()->back()->with('success', 'Booking berhasil dikirim!');
     }
 }

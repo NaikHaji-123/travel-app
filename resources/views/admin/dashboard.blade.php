@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin Dashboard - PT Syakirasya</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -59,6 +59,7 @@
 <body>
   <div class="container-fluid">
     <div class="row">
+      
       <!-- Sidebar -->
       <nav class="col-md-2 sidebar d-flex flex-column">
         <a href="#dashboard" class="nav-link active" data-bs-toggle="tab">🏠 Dashboard</a>
@@ -66,6 +67,7 @@
         <a href="#pembayaran" class="nav-link" data-bs-toggle="tab">💳 Pembayaran</a>
         <a href="#jamaah" class="nav-link" data-bs-toggle="tab">🧑‍🤝‍🧑 Data Jamaah</a>
         <a href="#transaksi" class="nav-link" data-bs-toggle="tab">📄 Riwayat Transaksi</a>
+        <a href="#booking" class="nav-link" data-bs-toggle="tab">📋 Booking</a>
         <a href="#laporan" class="nav-link" data-bs-toggle="tab">📊 Laporan</a>
         <a href="#profil" class="nav-link" data-bs-toggle="tab">👤 Profil Admin</a>
         <form action="{{ route('logout') }}" method="POST" class="mt-auto">
@@ -84,6 +86,7 @@
         </div>
 
         <div class="tab-content px-2">
+          
           <!-- Dashboard -->
           <div class="tab-pane fade show active" id="dashboard">
             @if($pembayaranMenunggu > 0)
@@ -242,6 +245,49 @@
             </div>
           </div>
 
+          <!-- Booking -->
+          <div class="tab-pane fade" id="booking">
+            <h5 class="mt-3">📋 Data Booking</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered align-middle">
+                <thead class="table-success">
+                  <tr>
+                    <th>Nama</th>
+                    <th>No. HP</th>
+                    <th>Paket</th>
+                    <th>Bukti Transfer</th>
+                    <th>Catatan</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @forelse($bookings as $b)
+                  <tr>
+                    <td>{{ $b->nama }}</td>
+                    <td>{{ $b->hp }}</td>
+                    <td>{{ $b->paket }}</td>
+                    <td>
+                      @if($b->bukti)
+                        <a href="{{ asset('storage/' . $b->bukti) }}" target="_blank" class="btn btn-sm btn-outline-success">
+                          Lihat
+                        </a>
+                      @else
+                        <span class="text-muted">-</span>
+                      @endif
+                    </td>
+                    <td>{{ $b->catatan ?? '-' }}</td>
+                    <td>{{ $b->created_at->format('d/m/Y H:i') }}</td>
+                  </tr>
+                  @empty
+                  <tr>
+                    <td colspan="6" class="text-center text-muted">Belum ada booking masuk.</td>
+                  </tr>
+                  @endforelse
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <!-- Laporan -->
           <div class="tab-pane fade" id="laporan">
             <h5 class="mt-3">📊 Export Laporan</h5>
@@ -259,6 +305,7 @@
               <button class="btn btn-outline-primary btn-sm">Ubah Password</button>
             </div>
           </div>
+
         </div>
       </main>
     </div>
@@ -272,10 +319,8 @@
     links.forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
-
         links.forEach(l => l.classList.remove('active'));
         tabs.forEach(t => t.classList.remove('show', 'active'));
-
         this.classList.add('active');
         const targetId = this.getAttribute('href');
         const targetTab = document.querySelector(targetId);

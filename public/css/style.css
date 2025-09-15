@@ -11,7 +11,7 @@ body {
   left: 0;
   width: 100%;
   z-index: 9999;             /* biar selalu di atas konten */
-  background: rgba(26, 93, 26, 0.85);
+  background-color: #87CEEB !important; /* Skyblue */
   backdrop-filter: blur(8px);
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
@@ -63,7 +63,7 @@ body {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-
+ 
 .whatsapp-float-left,
 .whatsapp-float {
   position: fixed;
@@ -123,16 +123,9 @@ body {
   color: #333;
 }
 
-#tentang h2 {
-  font-size: 2.5rem;
-  color: #1A5D1A;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
 #tentang h5 {
   font-size: 1.3rem;
-  color: #1A5D1A;
+  color: #000000;
   margin-top: 20px;
 }
 
@@ -144,7 +137,7 @@ body {
 
 #tentang .highlight-box {
   background: #fff;
-  border-left: 5px solid #1A5D1A;
+  border-left: 5px solid #000000;
   padding: 15px 20px;
   border-radius: 10px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.08);
@@ -208,7 +201,7 @@ body {
 }
 
 .paket-scroll-container::-webkit-scrollbar-thumb {
-  background: #1A5D1A;
+  background: #181d1d;
   border-radius: 10px;
 }
 
@@ -226,7 +219,7 @@ body {
   text-align: center;
   padding: 15px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid #1A5D1A;
+  border: 2px solid #00ccff;
 }
 
 .paket-card:hover {
@@ -246,12 +239,12 @@ body {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  color: #1A5D1A;
+  color: #000000;
   margin-top: 10px;
 }
 
 .btn-detail {
-  background-color: #1A5D1A;
+  background-color: #020202;
   color: white;
   padding: 8px 16px;
   border-radius: 25px;
@@ -471,7 +464,7 @@ body {
 
 .testimoni-box {
   background-color: #f9f9f9;
-  border-left: 5px solid #1A5D1A;
+  border-left: 5px solid #000000;
   padding: 1.5rem;
   max-width: 350px;
   width: 100%;
@@ -493,7 +486,7 @@ body {
 .testimoni-box h4 {
   margin: 0;
   font-weight: bold;
-  color: #1A5D1A;
+  color: #000000;
 }
 
 /* ================== LOGO ROW ================== */
@@ -565,4 +558,10 @@ body {
 @keyframes floatPulse {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
+}
+footer a:hover {
+  color: #ffd700 !important;
+}
+@media (max-width: 576px) {
+  .paket-card { width: 80%; }
 }

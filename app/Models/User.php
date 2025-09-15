@@ -10,9 +10,6 @@ class User extends Authenticatable
 {
     use Notifiable, HasFactory;
 
-    // Kalau tabel kamu bernama "users", tidak perlu $table
-    // Kalau misalnya nama tabel berbeda (misal "jamaah"), tambahkan:
-    // protected $table = 'jamaah';
 
     protected $fillable = [
         'nama',

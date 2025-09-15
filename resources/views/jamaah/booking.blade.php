@@ -22,7 +22,7 @@
     h3 {
       color: #1A5D1A;
       font-weight: bold;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     .form-label i {
       color: #1A5D1A;
@@ -59,15 +59,31 @@
       <p class="text-muted">Silakan lengkapi data di bawah ini untuk melanjutkan booking Anda.</p>
     </div>
 
-    <form action="https://script.google.com/macros/s/PASTE_SCRIPT_LINK/exec" method="POST" enctype="multipart/form-data">
+    {{-- Tampilkan pesan sukses --}}
+    @if(session('success'))
+      <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    {{-- Form Booking --}}
+    <form action="{{ route('booking.store') }}" method="POST" enctype="multipart/form-data">
+      @csrf
+
       <div class="mb-3">
         <label for="nama" class="form-label"><i class="fas fa-user"></i>Nama Lengkap</label>
-        <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama lengkap Anda" required>
+        <input type="text" class="form-control @error('nama') is-invalid @enderror" 
+               id="nama" name="nama" value="{{ old('nama') }}" required>
+        @error('nama')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
 
       <div class="mb-3">
         <label for="hp" class="form-label"><i class="fas fa-phone"></i>No. HP / WA Aktif</label>
-        <input type="tel" class="form-control" id="hp" name="hp" placeholder="08xxxxxxxxxx" required>
+        <input type="tel" class="form-control @error('hp') is-invalid @enderror" 
+               id="hp" name="hp" value="{{ old('hp') }}" required>
+        @error('hp')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
 
       <div class="mb-3">
@@ -75,22 +91,32 @@
           <span class="badge-paket">Umrah</span>
           <span class="badge-paket">Haji</span>
         </label>
-        <select class="form-select" id="paket" name="paket" required>
-          <option value="" selected disabled>-- Pilih Paket --</option>
-          <option value="Umrah Reguler">Umrah Reguler</option>
-          <option value="Umrah Plus Turki">Umrah Plus Turki</option>
-          <option value="Haji Khusus ONH Plus">Haji Khusus ONH Plus</option>
+        <select class="form-select @error('paket') is-invalid @enderror" id="paket" name="paket" required>
+          <option value="" disabled selected>-- Pilih Paket --</option>
+          <option value="Umrah Reguler" {{ old('paket') == 'Umrah Reguler' ? 'selected' : '' }}>Umrah Reguler</option>
+          <option value="Umrah Plus Turki" {{ old('paket') == 'Umrah Plus Turki' ? 'selected' : '' }}>Umrah Plus Turki</option>
+          <option value="Haji Khusus ONH Plus" {{ old('paket') == 'Haji Khusus ONH Plus' ? 'selected' : '' }}>Haji Khusus ONH Plus</option>
         </select>
+        @error('paket')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
 
       <div class="mb-3">
         <label for="bukti" class="form-label"><i class="fas fa-upload"></i>Upload Bukti Transfer</label>
-        <input type="file" class="form-control" id="bukti" name="bukti" accept="image/*">
+        <input type="file" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" accept="image/*">
+        @error('bukti')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
 
       <div class="mb-3">
         <label for="catatan" class="form-label"><i class="fas fa-comment-dots"></i>Catatan Tambahan</label>
-        <textarea class="form-control" id="catatan" name="catatan" rows="3" placeholder="Misal: Saya ingin berangkat dengan orang tua..."></textarea>
+        <textarea class="form-control @error('catatan') is-invalid @enderror" 
+                  id="catatan" name="catatan" rows="3">{{ old('catatan') }}</textarea>
+        @error('catatan')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
 
       <div class="d-grid">
@@ -103,13 +129,5 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Cek login dari localStorage
-  const isLogin = localStorage.getItem("login");
-  if (isLogin !== "true") {
-    alert("Silakan login terlebih dahulu.");
-    window.location.href = "login.html";
-  }
-</script>
 </body>
 </html>

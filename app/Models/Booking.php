@@ -1,27 +1,19 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Models;
 
-return new class extends Migration
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Booking extends Model
 {
-    public function up(): void
-    {
-        Schema::create('bookings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('nama');
-            $table->string('hp');
-            $table->string('paket');
-            $table->string('bukti')->nullable();
-            $table->text('catatan')->nullable();
-            $table->timestamps();
-        });
-    }
+    use HasFactory;
 
-    public function down(): void
-    {
-        Schema::dropIfExists('bookings');
-    }
-};
+    protected $fillable = [
+        'nama',
+        'hp',
+        'paket',
+        'bukti',
+        'catatan',
+    ];
+}

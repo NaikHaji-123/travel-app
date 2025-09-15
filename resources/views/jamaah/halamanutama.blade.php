@@ -14,11 +14,12 @@
 <body>
 
 <!-- Navbar -->
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
   <div class="container">
     <!-- Brand / Logo -->
-    <a class="navbar-brand fw-bold" href="#">
-      <img src="{{ asset('img/logo.png') }}" alt="Logo" height="30" class="me-2">
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+      <img src="{{ asset('img/logo.png') }}" alt="Logo" height="40" class="me-2">
       PT SYAKIRASYA
     </a>
 
@@ -51,13 +52,13 @@
 
         <!-- Auth Button -->
         @auth
-          <form action="{{ route('logout') }}" method="POST" class="d-inline">
+          <form action="{{ route('logout') }}" method="POST" class="d-inline ms-3">
             @csrf
-            <button type="submit" class="btn btn-light btn-sm ms-3">🚪 Login</button>
+            <button type="submit" class="btn btn-light btn-sm fw-bold">🚪 Logout</button>
           </form>
         @else
-          <li class="nav-item">
-            <a class="btn btn-light btn-sm ms-3" href="{{ route('login') }}">🔐 Login</a>
+          <li class="nav-item ms-3">
+            <a class="btn btn-light btn-sm fw-bold" href="{{ route('login') }}"> Login</a>
           </li>
         @endauth
       </ul>
@@ -70,9 +71,9 @@
          class="d-flex align-items-center" 
          style="height: 100vh; background: url('{{ asset('img/mekkah.jpg') }}') center/cover no-repeat; position: relative;">
 
-  <!-- Overlay gradasi -->
+  <!-- Overlay gradasi (biru langit) -->
   <div style="position: absolute; top:0; left:0; width:100%; height:100%;
-              background: linear-gradient(to right, rgba(26,93,26,0.85), rgba(26,93,26,0.3), rgba(26,93,26,0));">
+              background: linear-gradient(to right, rgba(135,206,235,0.85), rgba(135,206,235,0.3), rgba(135,206,235,0));">
   </div>
 
 <!-- Konten -->
@@ -105,10 +106,10 @@
       
       <!-- Kolom Kiri -->
       <div class="col-md-6 mb-4">
-        <h2 class="text-success fw-bold">Tentang Kami</h2>
+        <h2 class="fw-bold" style="color: #00d9ffff;">Tentang Kami</h2>
         <p>
           <strong>PT Syakirasya</strong> adalah perusahaan resmi yang bergerak di bidang jasa perjalanan
-          <span class="fw-bold text-success">Umrah dan Haji</span>. 
+          <span class="fw-bold" style="color: #000000ff;">Umrah dan Haji</span>
           Kami berkomitmen memberikan pelayanan terbaik, aman, dan nyaman 
           untuk setiap jamaah yang ingin menunaikan ibadah suci.
         </p>
@@ -126,7 +127,7 @@
           <li>📑 <strong>Legalitas Terjamin</strong> resmi terdaftar di Kementerian Agama</li>
         </ul>
 
-        <h5 class="mt-4 text-success">Kantor Pusat</h5>
+        <h5 class="mt-4" style="color: skyblue;">Kantor Pusat</h5>
         <p>Jl. Raya Mauk KM 12, Desa Kosambi, Sukadiri, Kabupaten Tangerang</p>
       </div>
 
@@ -144,7 +145,7 @@
 <!-- Paket -->
 <section id="paket" class="section">
   <div class="container">
-    <h2>Paket Haji & Umrah</h2>
+     <h2 class="fw-bold" style="color: #00d9ffff;">Paket haji & umrah</h2>
     <div class="paket-scroll-container">
       <div class="paket-card">
         <img src="{{ asset('img/umrah1.jpg') }}" alt="Umrah Reguler" />
@@ -185,62 +186,69 @@
 </div>
 
 <!-- KEUNGGULAN -->
-<section id="keunggulan" class="section py-5">
-  <div class="bg-emas text-center py-5">
-    <h2 class="mb-5 text-white">Kenapa Pilih PT Syakirasya?</h2>
+<!-- KEUNGGULAN -->
+<section id="keunggulan" class="section py-5" style="background-color: #e0f7ff;">
+  <div class="text-center py-5">
+    <h2 class="mb-5 fw-bold" style="color: #007BFF;">Kenapa Pilih PT Syakirasya?</h2>
     <div class="container">
       <div class="row g-4">
 
         <!-- Card 1 -->
         <div class="col-md-4">
-          <div class="card hover-card p-4 h-100 text-center">
+          <div class="card hover-card p-4 h-100 text-center shadow-sm border-0" 
+               style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/resmi.svg') }}" height="60" alt="Resmi">
-            <h5 class="mt-3">Resmi & Terdaftar</h5>
+            <h5 class="mt-3 fw-bold">Resmi & Terdaftar</h5>
             <p>Agen Umrah & Haji resmi Kemenag RI, aman, dan terpercaya sehingga perjalanan Anda lebih tenang.</p>
           </div>
         </div>
 
         <!-- Card 2 -->
         <div class="col-md-4">
-          <div class="card hover-card p-4 h-100 text-center">
+          <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
+               style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/bimbingan.svg') }}" height="60" alt="Bimbingan">
-            <h5 class="mt-3">Bimbingan Lengkap</h5>
+            <h5 class="mt-3 fw-bold">Bimbingan Lengkap</h5>
             <p>Didampingi pembimbing ibadah & berpengalaman yang siap memandu dari awal hingga akhir perjalanan.</p>
           </div>
         </div>
 
         <!-- Card 3 -->
         <div class="col-md-4">
-          <div class="card hover-card p-4 h-100 text-center">
+          <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
+               style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/hotel.svg') }}" height="60" alt="Hotel">
-            <h5 class="mt-3">Hotel Nyaman</h5>
+            <h5 class="mt-3 fw-bold">Hotel Nyaman</h5>
             <p>Akomodasi dekat Masjidil Haram & Nabawi.</p>
           </div>
         </div>
 
         <!-- Card 4 -->
         <div class="col-md-4">
-          <div class="card hover-card p-4 h-100 text-center">
+          <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
+               style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/money.svg') }}" height="60" alt="Harga">
-            <h5 class="mt-3">Harga Transparan</h5>
+            <h5 class="mt-3 fw-bold">Harga Transparan</h5>
             <p>Tanpa biaya tersembunyi, sesuai paket yang dipilih. Semua jelas, detail, dan transparan.</p>
           </div>
         </div>
 
         <!-- Card 5 -->
         <div class="col-md-4">
-          <div class="card hover-card p-4 h-100 text-center">
+          <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
+               style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/jadwal.svg') }}" height="60" alt="Jadwal">
-            <h5 class="mt-3">Jadwal Fleksibel</h5>
+            <h5 class="mt-3 fw-bold">Jadwal Fleksibel</h5>
             <p>Beragam pilihan paket dan jadwal keberangkatan, memudahkan jamaah menyesuaikan dengan waktu yang tersedia.</p>
           </div>
         </div>
 
         <!-- Card 6 -->
         <div class="col-md-4">
-          <div class="card hover-card p-4 h-100 text-center">
+          <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
+               style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/jam.svg') }}" height="60" alt="Support">
-            <h5 class="mt-3">Support 24 Jam</h5>
+            <h5 class="mt-3 fw-bold">Support 24 Jam</h5>
             <p>Tim support siap membantu jamaah kapanpun diperlukan, baik sebelum, saat, maupun setelah ibadah.</p>
           </div>
         </div>
@@ -250,11 +258,18 @@
   </div>
 </section>
 
+<style>
+  .hover-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.2);
+  }
+</style>
+
 
 <!-- Galeri -->
 <section id="galeri" class="section bg-light py-5">
   <div class="container text-center">
-    <h2 class="mb-4">Galeri</h2>
+     <h2 class="fw-bold" style="color: #00d9ffff;">Galeri</h2>
     <div class="row justify-content-center g-3">
       @for ($i = 1; $i <= 9; $i++)
         <div class="col-6 col-md-3 galeri-item">
@@ -322,38 +337,55 @@
 </section>
 
 <!-- Testimoni -->
-<section id="testimoni" class="section">
+<!-- Testimoni -->
+<section id="testimoni" class="section py-5" style="background: linear-gradient(to bottom, #f0f9ff, #ffffff);">
   <div class="container text-center">
-    <h2>Testimoni Jamaah</h2>
-    <div class="testimoni-wrapper">
-      <div class="testimoni-box" data-aos="fade-up">
-        <p>"Alhamdulillah, pelayanan selama Umrah sangat memuaskan. Terima kasih Syakirasya!"</p>
-        <h4>🌟 Ibu Ningih - Tangerang</h4>
+    <h2 class="mb-5 text-primary fw-bold">Testimoni Jamaah</h2>
+    <div class="testimoni-wrapper d-flex flex-wrap justify-content-center gap-4">
+      
+      <!-- Box 1 -->
+      <div class="testimoni-box p-4 rounded-4 shadow" data-aos="fade-up" 
+           style="background-color: #e6f7ff; max-width: 300px;">
+        <p class="mb-3">"Alhamdulillah, pelayanan selama Umrah sangat memuaskan. Terima kasih Syakirasya!"</p>
+        <h4 class="fw-semibold text-primary">🌟 Ibu Ningih - Tangerang</h4>
       </div>
-      <div class="testimoni-box" data-aos="fade-up">
-        <p>"Tim pembimbing sangat sabar dan berpengalaman. Perjalanan ibadah kami jadi lancar."</p>
-        <h4>🌟 Pak Ujang - Tangerang</h4>
+      
+      <!-- Box 2 -->
+      <div class="testimoni-box p-4 rounded-4 shadow" data-aos="fade-up" 
+           style="background-color: #e6f7ff; max-width: 300px;">
+        <p class="mb-3">"Tim pembimbing sangat sabar dan berpengalaman. Perjalanan ibadah kami jadi lancar."</p>
+        <h4 class="fw-semibold text-primary">🌟 Pak Ujang - Tangerang</h4>
       </div>
-      <div class="testimoni-box" data-aos="fade-up">
-        <p>"Hotel nyaman, makanan enak, dan jadwal tertib. Saya akan rekomendasikan ke keluarga."</p>
-        <h4>🌟 Pak Deripin - Tangerang</h4>
+      
+      <!-- Box 3 -->
+      <div class="testimoni-box p-4 rounded-4 shadow" data-aos="fade-up" 
+           style="background-color: #e6f7ff; max-width: 300px;">
+        <p class="mb-3">"Hotel nyaman, makanan enak, dan jadwal tertib. Saya akan rekomendasikan ke keluarga."</p>
+        <h4 class="fw-semibold text-primary">🌟 Pak Deripin - Tangerang</h4>
       </div>
     </div>
   </div>
 </section>
 
+
 <!-- Footer -->
-<footer class="bg-success text-white text-center py-3">
+<footer class="text-white text-center py-4" style="background-color: #87CEEB;">
   <div class="container">
-    <p>&copy; 2025 PT Syakirasya. All rights reserved.</p>
-    <div>
-      <a href="https://instagram.com/syakirasyagroup" target="_blank" class="text-white me-3">Instagram</a>
-      <a href="https://facebook.com/SyakirasyaUmroh" target="_blank" class="text-white">Facebook</a>
+    <p class="mb-2">&copy; 2025 <strong>PT Syakirasya</strong>. All rights reserved.</p>
+    <div class="d-flex justify-content-center gap-4">
+      <a href="https://instagram.com/syakirasyagroup" target="_blank" class="text-white fs-5">
+        <i class="bi bi-instagram"></i> Instagram
+      </a>
+      <a href="https://facebook.com/SyakirasyaUmroh" target="_blank" class="text-white fs-5">
+        <i class="bi bi-facebook"></i> Facebook
+      </a>
     </div>
   </div>
 </footer>
 
-<!-- Scripts -->
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>AOS.init();</script>
