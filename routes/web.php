@@ -6,6 +6,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\JamaahDashboardController;
 use App\Http\Controllers\AdminController;
 
+
 // =======================
 // HALAMAN UTAMA & UMUM
 // =======================
@@ -66,3 +67,31 @@ use App\Http\Controllers\BookingController;
 Route::middleware(['auth'])->group(function () {
     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 });
+// Admin - Paket
+Route::put('/admin/paket/{id}', [AdminController::class, 'updatePaket'])->name('paket.update');
+Route::delete('/admin/paket/{id}', [AdminController::class, 'destroyPaket'])->name('paket.destroy');
+
+// Admin - Jamaah
+Route::put('/admin/jamaah/{id}', [AdminController::class, 'updateJamaah'])->name('jamaah.update');
+Route::delete('/admin/jamaah/{id}', [AdminController::class, 'destroyJamaah'])->name('jamaah.destroy');
+
+use App\Http\Controllers\PaketController;
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('admin/paket', PaketController::class);
+});
+ // Form daftar berdasarkan paket tertentu
+Route::get('/pendaftaran/{paket}', [PendaftaranController::class, 'create'])
+    ->name('pendaftaran.create');
+// routes/web.php
+Route::resource('paket', PaketController::class);
+Route::resource('jamaah', JamaahController::class);
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::put('/admin/booking/{id}', [AdminController::class, 'updateBooking'])->name('booking.update');
+    Route::put('/admin/profile', [AdminController::class, 'updateProfile'])->name('admin.updateProfile');
+});
+
+Route::resource('paket', PaketController::class);

@@ -9,14 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-  public function up(): void
+    public function up(): void
     {
-       Schema::create('paket_travels', function (Blueprint $table) {
-    $table->id();
+        Schema::create('paket_travels', function (Blueprint $table) {
+            $table->id();
             $table->string('nama_paket');
             $table->text('deskripsi');
             $table->decimal('harga', 10, 2);
             $table->date('tanggal_berangkat');
+            $table->string('gambar')->nullable(); // 👉 kolom untuk gambar
             $table->timestamps();
         });
     }
@@ -26,4 +27,3 @@ return new class extends Migration
         Schema::dropIfExists('paket_travels');
     }
 };
-

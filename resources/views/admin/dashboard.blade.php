@@ -7,53 +7,35 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Poppins', sans-serif;
-    }
-    .sidebar {
-      height: 100vh;
-      background-color: #198754;
-      padding: 1rem;
-      position: sticky;
-      top: 0;
-    }
-    .sidebar a {
-      color: white;
-      display: block;
-      margin-bottom: 1rem;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-    }
-    .sidebar a:hover,
-    .sidebar a.active {
-      background-color: #146c43;
-      font-weight: bold;
-    }
-    .topbar {
-      background-color: white;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      margin-bottom: 1rem;
-      border-radius: 10px;
-    }
-    .card h6 {
-      color: #6c757d;
-    }
-    .table th, .table td {
-      vertical-align: middle;
-    }
-    .profile-card {
-      padding: 1rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .profile-card h5 {
-      font-weight: 600;
-    }
+    body { background-color: #e9f7fe; font-family: 'Poppins', sans-serif; }
+    
+    /* Sidebar */
+    .sidebar { height: 100vh; background-color: #0d6efd; padding: 1rem; position: sticky; top: 0; border-radius: 0 20px 20px 0; }
+    .sidebar a { color: white; display: block; margin-bottom: 1rem; text-decoration: none; padding: 0.5rem 1rem; border-radius: 10px; transition: background-color 0.3s, transform 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background-color: #0b5ed7; font-weight: bold; transform: scale(1.02); }
+    .sidebar form button { color: #ff6b6b; }
+
+    /* Topbar */
+    .topbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.08); margin-bottom: 1rem; border-radius: 12px; }
+
+    /* Cards */
+    .card { border: none; border-radius: 12px; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-5px); }
+    .card h6 { color: #6c757d; }
+
+    /* Tables */
+    .table th, .table td { vertical-align: middle; }
+    .table thead { background-color: #0d6efd; color: white; }
+    .btn-primary { background-color: #0d6efd; border: none; }
+    .btn-primary:hover { background-color: #0b5ed7; }
+
+    /* Buttons */
+    .btn-success { background-color: #0dcaf0; border: none; color: #fff; }
+    .btn-success:hover { background-color: #0aa5c0; }
+    .btn-warning { background-color: #ffc107; border: none; color: #212529; }
+    .btn-warning:hover { background-color: #e0a800; }
+    .btn-danger { background-color: #ff6b6b; border: none; color: white; }
+    .btn-danger:hover { background-color: #ff4c4c; }
   </style>
 </head>
 <body>
@@ -64,12 +46,7 @@
       <nav class="col-md-2 sidebar d-flex flex-column">
         <a href="#dashboard" class="nav-link active" data-bs-toggle="tab">🏠 Dashboard</a>
         <a href="#paket" class="nav-link" data-bs-toggle="tab">📦 Data Paket</a>
-        <a href="#pembayaran" class="nav-link" data-bs-toggle="tab">💳 Pembayaran</a>
         <a href="#jamaah" class="nav-link" data-bs-toggle="tab">🧑‍🤝‍🧑 Data Jamaah</a>
-        <a href="#transaksi" class="nav-link" data-bs-toggle="tab">📄 Riwayat Transaksi</a>
-        <a href="#booking" class="nav-link" data-bs-toggle="tab">📋 Booking</a>
-        <a href="#laporan" class="nav-link" data-bs-toggle="tab">📊 Laporan</a>
-        <a href="#profil" class="nav-link" data-bs-toggle="tab">👤 Profil Admin</a>
         <form action="{{ route('logout') }}" method="POST" class="mt-auto">
             @csrf
             <button type="submit" class="nav-link text-danger btn btn-link p-0 w-100 text-start" style="text-decoration:none;">
@@ -85,40 +62,35 @@
           <span class="text-muted">Selamat datang, {{ Auth::user()->nama ?? 'Admin' }}!</span>
         </div>
 
+        @if(session('success'))
+          <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
         <div class="tab-content px-2">
-          
           <!-- Dashboard -->
           <div class="tab-pane fade show active" id="dashboard">
-            @if($pembayaranMenunggu > 0)
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>⚠️ Notifikasi:</strong> Ada {{ $pembayaranMenunggu }} pembayaran baru yang menunggu konfirmasi!
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            @endif
-
-            <h5>📊 Statistik Singkat</h5>
             <div class="row g-3">
               <div class="col-md-4">
                 <div class="card shadow-sm">
-                  <div class="card-body">
+                  <div class="card-body text-center">
                     <h6>Total Paket</h6>
-                    <p class="fs-4 fw-semibold text-success">{{ $totalPaket }}</p>
+                    <p class="fs-4 fw-semibold text-primary">{{ $totalPaket }}</p>
                   </div>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="card shadow-sm">
-                  <div class="card-body">
+                  <div class="card-body text-center">
                     <h6>Jumlah Pembayaran</h6>
-                    <p class="fs-4 fw-semibold text-success">{{ $totalPembayaran }}</p>
+                    <p class="fs-4 fw-semibold text-primary">{{ $totalPembayaran }}</p>
                   </div>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="card shadow-sm">
-                  <div class="card-body">
-                    <h6>Total Jamaah Aktif</h6>
-                    <p class="fs-4 fw-semibold text-success">{{ $totalJamaah }}</p>
+                  <div class="card-body text-center">
+                    <h6>Total Jamaah</h6>
+                    <p class="fs-4 fw-semibold text-primary">{{ $totalJamaah }}</p>
                   </div>
                 </div>
               </div>
@@ -127,55 +99,25 @@
 
           <!-- Data Paket -->
           <div class="tab-pane fade" id="paket">
-            <h5 class="mt-3">📦 Data Paket</h5>
+            <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+              <h5>📦 Data Paket</h5>
+              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#tambahPaket">➕ Tambah Paket</button>
+            </div>
             <div class="table-responsive">
-              <table class="table table-bordered align-middle">
-                <thead class="table-success">
-                  <tr>
-                    <th>Nama Paket</th>
-                    <th>Harga</th>
-                    <th>Jadwal</th>
-                  </tr>
-                </thead>
+              <table class="table table-bordered">
+                <thead><tr><th>Nama Paket</th><th>Harga</th><th>Jadwal</th><th>Aksi</th></tr></thead>
                 <tbody>
                   @foreach($pakets as $paket)
                   <tr>
                     <td>{{ $paket->nama_paket }}</td>
-                    <td>Rp {{ number_format($paket->harga, 0, ',', '.') }}</td>
+                    <td>Rp {{ number_format($paket->harga,0,',','.') }}</td>
                     <td>{{ \Carbon\Carbon::parse($paket->tanggal_berangkat)->format('d M Y') }}</td>
-                  </tr>
-                  @endforeach
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Pembayaran -->
-          <div class="tab-pane fade" id="pembayaran">
-            <h5 class="mt-3">💳 Data Pembayaran</h5>
-            <div class="table-responsive">
-              <table class="table table-bordered align-middle">
-                <thead class="table-success">
-                  <tr>
-                    <th>Nama</th>
-                    <th>No. HP</th>
-                    <th>Paket</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach($pendaftarans as $p)
-                  <tr>
-                    <td>{{ $p->user->nama }}</td>
-                    <td>{{ $p->user->no_hp }}</td>
-                    <td>{{ $p->paketTravel->nama_paket }}</td>
                     <td>
-                      <span class="badge 
-                        @if($p->status == 'lunas') bg-success 
-                        @elseif($p->status == 'menunggu') bg-warning text-dark 
-                        @else bg-secondary @endif">
-                        {{ ucfirst($p->status) }}
-                      </span>
+                      <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editPaket{{ $paket->id }}">✏️ Edit</button>
+                      <form action="{{ route('paket.destroy',$paket->id) }}" method="POST" class="d-inline">
+                        @csrf @method('DELETE')
+                        <button class="btn btn-sm btn-danger" onclick="return confirm('Hapus paket ini?')">🗑 Hapus</button>
+                      </form>
                     </td>
                   </tr>
                   @endforeach
@@ -186,57 +128,25 @@
 
           <!-- Data Jamaah -->
           <div class="tab-pane fade" id="jamaah">
-            <h5 class="mt-3">🧑‍🤝‍🧑 Data Jamaah</h5>
+            <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+              <h5>🧑‍🤝‍🧑 Data Jamaah</h5>
+              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#tambahJamaah">➕ Tambah Jamaah</button>
+            </div>
             <div class="table-responsive">
-              <table class="table table-bordered align-middle">
-                <thead class="table-success">
-                  <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>No. HP</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
+              <table class="table table-bordered">
+                <thead><tr><th>Nama</th><th>Email</th><th>No. HP</th><th>Aksi</th></tr></thead>
                 <tbody>
                   @foreach($jamaah as $j)
                   <tr>
                     <td>{{ $j->nama }}</td>
                     <td>{{ $j->email }}</td>
                     <td>{{ $j->no_hp }}</td>
-                    <td><span class="badge bg-success">Aktif</span></td>
-                  </tr>
-                  @endforeach
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Riwayat Transaksi -->
-          <div class="tab-pane fade" id="transaksi">
-            <h5 class="mt-3">📄 Riwayat Transaksi</h5>
-            <div class="table-responsive">
-              <table class="table table-striped">
-                <thead class="table-success">
-                  <tr>
-                    <th>Tanggal</th>
-                    <th>Nama Jamaah</th>
-                    <th>Paket</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach($riwayatTransaksi as $t)
-                  <tr>
-                    <td>{{ $t->created_at->format('d/m/Y') }}</td>
-                    <td>{{ $t->user->nama }}</td>
-                    <td>{{ $t->paketTravel->nama_paket }}</td>
                     <td>
-                      <span class="badge 
-                        @if($t->status == 'lunas') bg-success 
-                        @elseif($t->status == 'menunggu') bg-warning text-dark 
-                        @else bg-secondary @endif">
-                        {{ ucfirst($t->status) }}
-                      </span>
+                      <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editJamaah{{ $j->id }}">✏️ Edit</button>
+                      <form action="{{ route('jamaah.destroy',$j->id) }}" method="POST" class="d-inline">
+                        @csrf @method('DELETE')
+                        <button class="btn btn-sm btn-danger" onclick="return confirm('Hapus jamaah ini?')">🗑 Hapus</button>
+                      </form>
                     </td>
                   </tr>
                   @endforeach
@@ -244,68 +154,6 @@
               </table>
             </div>
           </div>
-
-          <!-- Booking -->
-          <div class="tab-pane fade" id="booking">
-            <h5 class="mt-3">📋 Data Booking</h5>
-            <div class="table-responsive">
-              <table class="table table-bordered align-middle">
-                <thead class="table-success">
-                  <tr>
-                    <th>Nama</th>
-                    <th>No. HP</th>
-                    <th>Paket</th>
-                    <th>Bukti Transfer</th>
-                    <th>Catatan</th>
-                    <th>Tanggal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @forelse($bookings as $b)
-                  <tr>
-                    <td>{{ $b->nama }}</td>
-                    <td>{{ $b->hp }}</td>
-                    <td>{{ $b->paket }}</td>
-                    <td>
-                      @if($b->bukti)
-                        <a href="{{ asset('storage/' . $b->bukti) }}" target="_blank" class="btn btn-sm btn-outline-success">
-                          Lihat
-                        </a>
-                      @else
-                        <span class="text-muted">-</span>
-                      @endif
-                    </td>
-                    <td>{{ $b->catatan ?? '-' }}</td>
-                    <td>{{ $b->created_at->format('d/m/Y H:i') }}</td>
-                  </tr>
-                  @empty
-                  <tr>
-                    <td colspan="6" class="text-center text-muted">Belum ada booking masuk.</td>
-                  </tr>
-                  @endforelse
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Laporan -->
-          <div class="tab-pane fade" id="laporan">
-            <h5 class="mt-3">📊 Export Laporan</h5>
-            <button class="btn btn-outline-success me-2">📥 Export Excel</button>
-            <button class="btn btn-outline-danger">📄 Export PDF</button>
-          </div>
-
-          <!-- Profil Admin -->
-          <div class="tab-pane fade" id="profil">
-            <h5 class="mt-3">👤 Profil Admin</h5>
-            <div class="profile-card">
-              <h5>Nama: {{ Auth::user()->nama ?? 'Admin' }}</h5>
-              <p>Email: {{ Auth::user()->email ?? '-' }}</p>
-              <p>Terakhir Login: {{ Auth::user()->last_login ?? '-' }}</p>
-              <button class="btn btn-outline-primary btn-sm">Ubah Password</button>
-            </div>
-          </div>
-
         </div>
       </main>
     </div>
@@ -313,18 +161,16 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // sidebar nav
     const links = document.querySelectorAll('.sidebar a[data-bs-toggle="tab"]');
     const tabs = document.querySelectorAll('.tab-pane');
-
     links.forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         links.forEach(l => l.classList.remove('active'));
-        tabs.forEach(t => t.classList.remove('show', 'active'));
+        tabs.forEach(t => t.classList.remove('show','active'));
         this.classList.add('active');
-        const targetId = this.getAttribute('href');
-        const targetTab = document.querySelector(targetId);
-        if (targetTab) targetTab.classList.add('show', 'active');
+        document.querySelector(this.getAttribute('href')).classList.add('show','active');
       });
     });
   </script>

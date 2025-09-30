@@ -102,9 +102,28 @@
         @enderror
       </div>
 
+      {{-- Upload KTP --}}
       <div class="mb-3">
-        <label for="bukti" class="form-label"><i class="fas fa-upload"></i>Upload Bukti Transfer</label>
-        <input type="file" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" accept="image/*">
+        <label for="ktp" class="form-label"><i class="fas fa-id-card"></i> Upload KTP</label>
+        <input type="file" class="form-control @error('ktp') is-invalid @enderror" id="ktp" name="ktp" accept="image/*" required>
+        @error('ktp')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      {{-- Upload KK --}}
+      <div class="mb-3">
+        <label for="kk" class="form-label"><i class="fas fa-users"></i> Upload Kartu Keluarga</label>
+        <input type="file" class="form-control @error('kk') is-invalid @enderror" id="kk" name="kk" accept="image/*" required>
+        @error('kk')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      {{-- Upload Bukti Transfer --}}
+      <div class="mb-3">
+        <label for="bukti" class="form-label"><i class="fas fa-upload"></i> Upload Bukti Transfer</label>
+        <input type="file" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" accept="image/*" required>
         @error('bukti')
           <div class="invalid-feedback">{{ $message }}</div>
         @enderror
