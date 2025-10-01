@@ -7,28 +7,36 @@ use App\Models\Jamaah;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Pendaftaran;
+
+$pendaftaran = Pendaftaran::with('user','paketTravel')->get();
+
+
 
 class AdminController extends Controller
 {
     // ========================
     // DASHBOARD ADMIN
     // ========================
-    public function index()
-    {
-        $totalPaket = PaketTravel::count();
-        $totalJamaah = Jamaah::count();
-        $pakets = PaketTravel::all();
-        $jamaah = Jamaah::all();
-        $bookings = Booking::all();
+   public function index()
+{
+    $totalPaket = PaketTravel::count();
+    $totalJamaah = Jamaah::count();
+    $pakets = PaketTravel::all();
+    $jamaah = Jamaah::all();
+    $bookings = Booking::all();
+    $pendaftaran = Pendaftaran::with('user','paketTravel')->get(); // <- di sini
 
-        return view('admin.dashboard', compact(
-            'totalPaket',
-            'totalJamaah',
-            'pakets',
-            'jamaah',
-            'bookings'
-        ));
-    }
+    return view('admin.dashboard', compact(
+        'totalPaket',
+        'totalJamaah',
+        'pakets',
+        'jamaah',
+        'bookings',
+        'pendaftaran'
+    ));
+}
+
 
     // ========================
     // CRUD PAKET

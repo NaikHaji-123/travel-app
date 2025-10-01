@@ -8,9 +8,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; }
-    .sidebar { height: 100vh; background-color: #198754; padding: 1rem; position: sticky; top: 0; }
+    .sidebar { height: 100vh; background-color: #008cffff; padding: 1rem; position: sticky; top: 0; }
     .sidebar a { color: white; display: block; margin-bottom: 1rem; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; transition: background-color 0.3s; }
-    .sidebar a:hover, .sidebar a.active { background-color: #146c43; font-weight: bold; }
+    .sidebar a:hover, .sidebar a.active { background-color:  #008cffff; font-weight: bold; }
     .topbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 1rem; border-radius: 10px; }
     .card h6 { color: #6c757d; }
     .table th, .table td { vertical-align: middle; }

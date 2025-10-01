@@ -565,3 +565,16 @@ footer a:hover {
 @media (max-width: 576px) {
   .paket-card { width: 80%; }
 }
+/* ================== BUTTONS ================== */
+.btn-sky {
+    background-color: #87CEEB; /* biru langit */
+    color: white;
+    border: none;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-sky:hover {
+    background-color: #00BFFF; /* sedikit lebih gelap saat hover */
+    transform: scale(1.05);
+}

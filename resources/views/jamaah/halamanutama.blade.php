@@ -81,9 +81,9 @@
       <p class="lead">Perjalanan Haji dan Umrah dengan pelayanan terbaik & terpercaya</p>
       
       <!-- Tombol Booking -->
-      <a href="{{ route('booking') }}" class="btn btn-success btn-lg rounded-pill mt-3 me-2">
-        🛫 Booking Sekarang
-      </a>
+      <a href="{{ route('booking') }}" class="btn btn-lg rounded-pill mt-3 me-2 btn-sky">
+  🛫 Booking Sekarang
+</a>
     </div>
   </div>
 </div>
@@ -190,7 +190,7 @@
           <div class="card hover-card p-4 h-100 text-center shadow-sm border-0" 
                style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/resmi.svg') }}" height="60" alt="Resmi">
-            <h5 class="mt-3 fw-bold">Resmi & Terdaftar</h5>
+            <h5 class="mt-3 fw-bold" style="color: #87CEEB;">Resmi & Terdaftar</h5>
             <p>Agen Umrah & Haji resmi Kemenag RI, aman, dan terpercaya sehingga perjalanan Anda lebih tenang.</p>
           </div>
         </div>
@@ -200,7 +200,7 @@
           <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
                style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/bimbingan.svg') }}" height="60" alt="Bimbingan">
-            <h5 class="mt-3 fw-bold">Bimbingan Lengkap</h5>
+            <h5 class="mt-3 fw-bold" style="color: #87CEEB;">Bimbingan Lengkap</h5>
             <p>Didampingi pembimbing ibadah & berpengalaman yang siap memandu dari awal hingga akhir perjalanan.</p>
           </div>
         </div>
@@ -210,7 +210,7 @@
           <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
                style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/hotel.svg') }}" height="60" alt="Hotel">
-            <h5 class="mt-3 fw-bold">Hotel Nyaman</h5>
+            <h5 class="mt-3 fw-bold" style="color: #87CEEB;">Hotel Nyaman</h5>
             <p>Akomodasi dekat Masjidil Haram & Nabawi.</p>
           </div>
         </div>
@@ -220,7 +220,7 @@
           <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
                style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/money.svg') }}" height="60" alt="Harga">
-            <h5 class="mt-3 fw-bold">Harga Transparan</h5>
+            <h5 class="mt-3 fw-bold" style="color: #87CEEB;">Harga Transparan</h5>
             <p>Tanpa biaya tersembunyi, sesuai paket yang dipilih. Semua jelas, detail, dan transparan.</p>
           </div>
         </div>
@@ -230,7 +230,7 @@
           <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
                style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/jadwal.svg') }}" height="60" alt="Jadwal">
-            <h5 class="mt-3 fw-bold">Jadwal Fleksibel</h5>
+            <h5 class="mt-3 fw-bold" style="color: #87CEEB;">Jadwal Fleksibel</h5>
             <p>Beragam pilihan paket dan jadwal keberangkatan, memudahkan jamaah menyesuaikan dengan waktu yang tersedia.</p>
           </div>
         </div>
@@ -240,7 +240,7 @@
           <div class="card hover-card p-4 h-100 text-center shadow-sm border-0"
                style="transition: transform 0.3s, box-shadow 0.3s;">
             <img src="{{ asset('img/jam.svg') }}" height="60" alt="Support">
-            <h5 class="mt-3 fw-bold">Support 24 Jam</h5>
+            <h5 class="mt-3 fw-bold" style="color: #87CEEB;">Support 24 Jam</h5>
             <p>Tim support siap membantu jamaah kapanpun diperlukan, baik sebelum, saat, maupun setelah ibadah.</p>
           </div>
         </div>
@@ -339,7 +339,7 @@
       <div class="testimoni-box p-4 rounded-4 shadow" data-aos="fade-up" 
            style="background-color: #e6f7ff; max-width: 300px;">
         <p class="mb-3">"Alhamdulillah, pelayanan selama Umrah sangat memuaskan. Terima kasih Syakirasya!"</p>
-        <h4 class="fw-semibold text-primary">🌟 Ibu Ningih - Tangerang</h4>
+        <h4 class="fw-semibold text-primary">🌟 Ibu Ningsih - Tangerang</h4>
       </div>
       
       <!-- Box 2 -->
