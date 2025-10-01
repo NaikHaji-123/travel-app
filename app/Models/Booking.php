@@ -2,25 +2,29 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'jamaah_id',
-        'paket_id',
-        'status', // pending, confirmed, cancelled
+        'nama',
+        'hp',
+        'paket',
+        'bukti',
+        'catatan',
+        'status', // pending / acc / ditolak
     ];
 
-    // Relasi ke Jamaah
     public function jamaah()
     {
-        return $this->belongsTo(Jamaah::class);
+        return $this->belongsTo(Jamaah::class, 'nama', 'nama'); // contoh relasi sederhana
     }
 
-    // Relasi ke Paket
-    public function paket()
+    public function paketRelation()
     {
-        return $this->belongsTo(Paket::class);
+        return $this->belongsTo(PaketTravel::class, 'paket', 'nama_paket');
     }
 }

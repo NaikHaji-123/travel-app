@@ -2,52 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\PaketTravel;
-use App\Models\Pendaftaran;
+use App\Models\Jamaah;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
     // ========================
-    // INDEX
+    // DASHBOARD ADMIN
     // ========================
     public function index()
     {
-        // Memanggil dashboard
-        return $this->dashboard();
-    }
-
-    // ========================
-    // DASHBOARD
-    // ========================
-    public function dashboard()
-    {
-        // Ringkasan
         $totalPaket = PaketTravel::count();
-        $totalPembayaran = Pendaftaran::where('status', 'lunas')->count();
-        $totalJamaah = User::where('role', 'jamaah')->count();
-        $pembayaranMenunggu = Pendaftaran::where('status', 'menunggu')->count();
-
-        // Data untuk tabel
-        $pakets = PaketTravel::orderBy('tanggal_berangkat', 'asc')->get();
-        $pendaftarans = Pendaftaran::with(['user', 'paketTravel'])->get();
-        $jamaah = User::where('role', 'jamaah')->get();
-        $riwayatTransaksi = Pendaftaran::with(['user', 'paketTravel'])->latest()->take(10)->get();
-
-        // Booking
-        $bookings = Booking::latest()->get();
+        $totalJamaah = Jamaah::count();
+        $pakets = PaketTravel::all();
+        $jamaah = Jamaah::all();
+        $bookings = Booking::all();
 
         return view('admin.dashboard', compact(
             'totalPaket',
-            'totalPembayaran',
             'totalJamaah',
-            'pembayaranMenunggu',
             'pakets',
-            'pendaftarans',
             'jamaah',
-            'riwayatTransaksi',
             'bookings'
         ));
     }
@@ -55,58 +33,129 @@ class AdminController extends Controller
     // ========================
     // CRUD PAKET
     // ========================
-    public function updatePaket(Request $request, $id)
+    public function storePaket(Request $request)
     {
         $request->validate([
             'nama_paket' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
             'harga' => 'required|numeric',
             'tanggal_berangkat' => 'required|date',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $data = $request->only('nama_paket', 'deskripsi', 'harga', 'tanggal_berangkat');
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('paket','public');
+        }
+
+        PaketTravel::create($data);
+
+        return redirect()->back()->with('success','Paket berhasil ditambahkan!');
+    }
+
+    public function updatePaket(Request $request, $id)
+    {
         $paket = PaketTravel::findOrFail($id);
-        $paket->update([
-            'nama_paket' => $request->nama_paket,
-            'harga' => $request->harga,
-            'tanggal_berangkat' => $request->tanggal_berangkat,
+
+        $request->validate([
+            'nama_paket' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'harga' => 'required|numeric',
+            'tanggal_berangkat' => 'required|date',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Paket berhasil diperbarui!');
+        $data = $request->only('nama_paket', 'deskripsi', 'harga', 'tanggal_berangkat');
+
+        if ($request->hasFile('gambar')) {
+            if ($paket->gambar && Storage::disk('public')->exists($paket->gambar)) {
+                Storage::disk('public')->delete($paket->gambar);
+            }
+            $data['gambar'] = $request->file('gambar')->store('paket','public');
+        }
+
+        $paket->update($data);
+
+        return redirect()->back()->with('success','Paket berhasil diperbarui!');
     }
 
     public function destroyPaket($id)
     {
         $paket = PaketTravel::findOrFail($id);
+
+        if ($paket->gambar && Storage::disk('public')->exists($paket->gambar)) {
+            Storage::disk('public')->delete($paket->gambar);
+        }
+
         $paket->delete();
 
-        return redirect()->route('admin.dashboard')->with('success', 'Paket berhasil dihapus!');
+        return redirect()->back()->with('success','Paket berhasil dihapus!');
     }
 
     // ========================
     // CRUD JAMAAH
     // ========================
-    public function updateJamaah(Request $request, $id)
+    public function storeJamaah(Request $request)
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:jamaahs,email',
             'no_hp' => 'required|string|max:20',
+            'password' => 'required|string|min:6',
         ]);
 
-        $jamaah = User::findOrFail($id);
-        $jamaah->update([
+        Jamaah::create([
             'nama' => $request->nama,
             'email' => $request->email,
             'no_hp' => $request->no_hp,
+            'password' => bcrypt($request->password),
         ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Data Jamaah berhasil diperbarui!');
+        return redirect()->back()->with('success','Jamaah berhasil ditambahkan!');
+    }
+
+    public function updateJamaah(Request $request, $id)
+    {
+        $jamaah = Jamaah::findOrFail($id);
+
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|unique:jamaahs,email,'.$jamaah->id,
+            'no_hp' => 'required|string|max:20',
+        ]);
+
+        $jamaah->update($request->only('nama','email','no_hp'));
+
+        return redirect()->back()->with('success','Jamaah berhasil diperbarui!');
     }
 
     public function destroyJamaah($id)
     {
-        $jamaah = User::findOrFail($id);
+        $jamaah = Jamaah::findOrFail($id);
         $jamaah->delete();
 
-        return redirect()->route('admin.dashboard')->with('success', 'Data Jamaah berhasil dihapus!');
+        return redirect()->back()->with('success','Jamaah berhasil dihapus!');
+    }
+
+    // ========================
+    // BOOKING JAMAAH
+    // ========================
+    public function bookingAcc($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->status = 'acc';
+        $booking->save();
+
+        return redirect()->back()->with('success','Booking berhasil di-ACC!');
+    }
+
+    public function bookingTolak($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->status = 'ditolak';
+        $booking->save();
+
+        return redirect()->back()->with('success','Booking ditolak.');
     }
 }

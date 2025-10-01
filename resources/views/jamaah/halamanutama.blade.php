@@ -71,10 +71,7 @@
          class="d-flex align-items-center" 
          style="height: 100vh; background: url('{{ asset('img/mekkah.jpg') }}') center/cover no-repeat; position: relative;">
 
-  <!-- Overlay gradasi (biru langit) -->
-  <div style="position: absolute; top:0; left:0; width:100%; height:100%;
-              background: linear-gradient(to right, rgba(135,206,235,0.85), rgba(135,206,235,0.3), rgba(135,206,235,0));">
-  </div>
+
 
 <!-- Konten -->
 <div class="container position-relative text-white" style="z-index: 2;">
@@ -86,11 +83,6 @@
       <!-- Tombol Booking -->
       <a href="{{ route('booking') }}" class="btn btn-success btn-lg rounded-pill mt-3 me-2">
         🛫 Booking Sekarang
-      </a>
-
-      <!-- Tombol Hubungi -->
-      <a href="https://wa.me/6281295730907" target="_blank" class="btn btn-primary btn-lg rounded-pill mt-3">
-        📞 Segera Hubungi Kami
       </a>
     </div>
   </div>
