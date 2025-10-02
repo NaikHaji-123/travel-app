@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard Jamaah</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -35,6 +35,30 @@
             border-top-left-radius: .75rem;
             border-top-right-radius: .75rem;
         }
+        .paket-scroll-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        .paket-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .paket-scroll-container::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        .paket-card {
+            min-width: 220px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
@@ -44,7 +68,7 @@
     {{-- Header --}}
     <div class="dashboard-header mb-4 d-flex justify-content-between align-items-center">
         <div>
-            <h2 class="mb-0"><i class="bi bi-person-circle"></i> Selamat Datang, {{ $user->name }}</h2>
+            <h2 class="mb-0"><i class="bi bi-person-circle"></i> Selamat Datang, {{ $user->name ?? '-' }}</h2>
             <p class="lead mt-2 mb-0">Pantau status & riwayat pendaftaran haji & umrah Anda</p>
         </div>
         <div>
@@ -66,11 +90,13 @@
                 <div class="card shadow-sm card-info">
                     <div class="card-body">
                         <p><i class="bi bi-box-seam text-success"></i> 
-                            <strong>Paket:</strong> {{ $pendaftaran->paketTravel->nama_paket ?? '-' }}
+                            <strong>Paket:</strong> {{ $pendaftaran->paketTravel->nama_paket ?? $pendaftaran->paket ?? '-' }}
                         </p>
                         <p><i class="bi bi-calendar-event text-primary"></i> 
                             <strong>Tanggal Berangkat:</strong>
-                            {{ optional($pendaftaran->paketTravel->tanggal_berangkat)->format('d F Y') ?? '-' }}
+                            {{ $pendaftaran->paketTravel && $pendaftaran->paketTravel->tanggal_berangkat 
+                                ? $pendaftaran->paketTravel->tanggal_berangkat->format('d F Y') 
+                                : '-' }}
                         </p>
                         <p><i class="bi bi-info-circle text-warning"></i> 
                             <strong>Status:</strong> 
@@ -79,7 +105,7 @@
                         <p><i class="bi bi-cash-coin text-success"></i> 
                             <strong>Total Bayar:</strong>
                             <span class="text-success fw-bold">
-                                Rp {{ number_format($pendaftaran->pembayaran->jumlah ?? 0, 0, ',', '.') }}
+                                Rp {{ number_format(optional($pendaftaran->pembayaran)->jumlah ?? 0, 0, ',', '.') }}
                             </span>
                         </p>
                     </div>
@@ -89,9 +115,9 @@
             @endif
         </div>
 
-        {{-- Riwayat Pendaftaran --}}
+        {{-- Riwayat Pendaftaran & Booking --}}
         <div class="col-md-7">
-            <h4 class="mb-3"><i class="bi bi-journal-text"></i> Riwayat Pendaftaran</h4>
+            <h4 class="mb-3"><i class="bi bi-journal-text"></i> Riwayat Pendaftaran & Booking</h4>
             @if($riwayat->count())
                 <div class="table-responsive shadow-sm">
                     <table class="table table-hover table-bordered align-middle mb-0">
@@ -105,13 +131,18 @@
                         <tbody>
                             @foreach($riwayat as $r)
                                 <tr>
-                                    <td>{{ $r->paketTravel->nama_paket ?? '-' }}</td>
-                                    <td>{{ optional($r->paketTravel->tanggal_berangkat)->format('d F Y') ?? '-' }}</td>
+                                    <td>{{ $r->paketTravel->nama_paket ?? $r->paket ?? '-' }}</td>
+                                    <td>
+                                        {{ $r->paketTravel && $r->paketTravel->tanggal_berangkat 
+                                            ? $r->paketTravel->tanggal_berangkat->format('d F Y') 
+                                            : '-' }}
+                                    </td>
                                     <td class="text-center">
                                         @php
-                                            $color = $r->status == 'Lunas' ? 'success' : ($r->status == 'Pending' ? 'warning' : 'secondary');
+                                            $status = $r->status ?? '-';
+                                            $color = $status === 'Lunas' ? 'success' : ($status === 'Pending' ? 'warning' : 'secondary');
                                         @endphp
-                                        <span class="badge bg-{{ $color }}">{{ $r->status ?? '-' }}</span>
+                                        <span class="badge bg-{{ $color }}">{{ $status }}</span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -119,47 +150,42 @@
                     </table>
                 </div>
             @else
-                <p class="text-muted fst-italic">Tidak ada riwayat pendaftaran.</p>
+                <p class="text-muted fst-italic">Tidak ada riwayat pendaftaran atau booking.</p>
             @endif
         </div>
 
     </div>
 
-    {{-- Daftar Paket dari Admin (arah ke halaman utama section paket) --}}
-    <div class="mt-5">
-        <h4 class="mb-3"><i class="bi bi-box-seam"></i> Daftar Paket dari Admin</h4>
-        @if($pakets->count())
-            <div class="row g-4">
-                @foreach($pakets as $paket)
-                    <div class="col-md-4">
-                        <div class="card shadow-sm h-100 paket-card">
+    {{-- Paket dari Admin --}}
+    <section id="paket" class="section py-5">
+        <div class="container">
+            <h2 class="fw-bold mb-4" style="color: #00d9ffff;">Paket haji & umrah</h2>
+
+            @if($pakets->count())
+                <div class="paket-scroll-container d-flex gap-3 overflow-auto">
+                    @foreach($pakets as $paket)
+                        <div class="paket-card flex-shrink-0">
                             @if($paket->gambar)
-                                <img src="{{ asset('storage/' . $paket->gambar) }}" 
-                                     class="card-img-top" 
-                                     alt="{{ $paket->nama_paket }}">
+                                <img src="{{ asset('storage/'.$paket->gambar) }}" 
+                                     alt="{{ $paket->nama_paket }}" class="img-fluid mb-2">
                             @endif
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ $paket->nama_paket }}</h5>
-                                <p class="card-text text-muted flex-grow-1">{{ $paket->deskripsi }}</p>
-                                <p><i class="bi bi-calendar-event"></i> 
-                                    {{ \Carbon\Carbon::parse($paket->tanggal_berangkat)->format('d F Y') }}
-                                </p>
-                                <p class="fw-bold text-success">
-                                    Rp {{ number_format($paket->harga, 0, ',', '.') }}
-                                </p>
-                                {{-- Tombol daftar sekarang arah ke homepage section #paket --}}
-                                <a href="{{ route('home') }}#paket" class="btn btn-success btn-sm w-100 mt-auto">
-                                    <i class="bi bi-check-circle"></i> Daftar Sekarang
-                                </a>
-                            </div>
+                            <h5 class="fw-bold">{{ $paket->nama_paket ?? '-' }}</h5>
+                            <p class="text-muted">{{ \Illuminate\Support\Str::limit($paket->deskripsi ?? '-', 60) }}</p>
+                            <p class="fw-bold text-success">
+                                Rp {{ number_format($paket->harga ?? 0, 0, ',', '.') }}
+                            </p>
+                            <a href="{{ route('pendaftaran.form', ['paket' => $paket->id]) }}" 
+                               class="btn btn-success btn-sm w-100">
+                                Daftar Sekarang
+                            </a>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <p class="text-muted fst-italic">Belum ada paket yang ditambahkan admin.</p>
-        @endif
-    </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="text-muted fst-italic">Belum ada paket yang ditambahkan admin.</p>
+            @endif
+        </div>
+    </section>
 
 </div>
 

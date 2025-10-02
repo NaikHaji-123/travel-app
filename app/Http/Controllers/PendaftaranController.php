@@ -21,7 +21,8 @@ class PendaftaranController extends Controller
     {
         $users = User::all();
         $paketTravels = PaketTravel::all();
-        return view('pendaftaran.create', compact('users', 'paketTravels'));
+        // ⬇️ Ubah ke 'pendaftaran.form' karena file kamu form.blade.php
+        return view('pendaftaran.form', compact('users', 'paketTravels'));
     }
 
     // Simpan pendaftaran baru

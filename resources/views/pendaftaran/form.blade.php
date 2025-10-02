@@ -1,29 +1,152 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Form Pendaftaran</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Form Booking - PT Syakirasya</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Poppins', sans-serif;
+    }
+    .booking-form {
+      max-width: 650px;
+      margin: 60px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.07);
+    }
+    h3 {
+      color: #1A5D1A;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .form-label i {
+      color: #1A5D1A;
+      margin-right: 6px;
+    }
+    .btn-success {
+      background-color: #1A5D1A;
+      border: none;
+    }
+    .btn-success:hover {
+      background-color: #144d14;
+    }
+    .badge-paket {
+      background-color: #e9f5e9;
+      color: #1A5D1A;
+      font-size: 13px;
+      border-radius: 8px;
+      padding: 4px 8px;
+      margin-left: 6px;
+    }
+    .header-icon {
+      font-size: 32px;
+      color: #1A5D1A;
+    }
+  </style>
 </head>
-<body class="p-4">
+<body>
 
-    <div class="container">
-        <h2 class="mb-4">📝 Form Pendaftaran</h2>
-
-        <form action="{{ route('pendaftaran.store') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label for="paket" class="form-label">Pilih Paket</label>
-                <select name="paket_id" id="paket" class="form-control">
-                    <option value="1">Umrah Reguler</option>
-                    <option value="2">Umrah Plus Turki</option>
-                    <option value="3">Haji Khusus</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-success">Daftar</button>
-        </form>
+<div class="container">
+  <div class="booking-form">
+    <div class="text-center mb-4">
+      <i class="fas fa-kaaba header-icon"></i>
+      <h3 class="mt-2">Form Booking Umrah / Haji</h3>
+      <p class="text-muted">Silakan lengkapi data di bawah ini untuk melanjutkan booking Anda.</p>
     </div>
 
+    {{-- Tampilkan pesan sukses --}}
+    @if(session('success'))
+      <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    {{-- Form Booking --}}
+    <form action="{{ route('booking.store') }}" method="POST" enctype="multipart/form-data">
+      @csrf
+
+      <div class="mb-3">
+        <label for="nama" class="form-label"><i class="fas fa-user"></i>Nama Lengkap</label>
+        <input type="text" class="form-control @error('nama') is-invalid @enderror" 
+               id="nama" name="nama" value="{{ old('nama') }}" required>
+        @error('nama')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <div class="mb-3">
+        <label for="hp" class="form-label"><i class="fas fa-phone"></i>No. HP / WA Aktif</label>
+        <input type="tel" class="form-control @error('hp') is-invalid @enderror" 
+               id="hp" name="hp" value="{{ old('hp') }}" required>
+        @error('hp')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <div class="mb-3">
+        <label for="paket" class="form-label"><i class="fas fa-box"></i>Pilih Paket
+          <span class="badge-paket">Umrah</span>
+          <span class="badge-paket">Haji</span>
+        </label>
+        <select class="form-select @error('paket') is-invalid @enderror" id="paket" name="paket" required>
+          <option value="" disabled selected>-- Pilih Paket --</option>
+          <option value="Umrah Reguler" {{ old('paket') == 'Umrah Reguler' ? 'selected' : '' }}>Umrah Reguler</option>
+          <option value="Umrah Plus Turki" {{ old('paket') == 'Umrah Plus Turki' ? 'selected' : '' }}>Umrah Plus Turki</option>
+          <option value="Haji Khusus ONH Plus" {{ old('paket') == 'Haji Khusus ONH Plus' ? 'selected' : '' }}>Haji Khusus ONH Plus</option>
+        </select>
+        @error('paket')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      {{-- Upload KTP --}}
+      <div class="mb-3">
+        <label for="ktp" class="form-label"><i class="fas fa-id-card"></i> Upload KTP</label>
+        <input type="file" class="form-control @error('ktp') is-invalid @enderror" id="ktp" name="ktp" accept="image/*" required>
+        @error('ktp')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      {{-- Upload KK --}}
+      <div class="mb-3">
+        <label for="kk" class="form-label"><i class="fas fa-users"></i> Upload Kartu Keluarga</label>
+        <input type="file" class="form-control @error('kk') is-invalid @enderror" id="kk" name="kk" accept="image/*" required>
+        @error('kk')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      {{-- Upload Bukti Transfer --}}
+      <div class="mb-3">
+        <label for="bukti" class="form-label"><i class="fas fa-upload"></i> Upload Bukti Transfer</label>
+        <input type="file" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" accept="image/*" required>
+        @error('bukti')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <div class="mb-3">
+        <label for="catatan" class="form-label"><i class="fas fa-comment-dots"></i>Catatan Tambahan</label>
+        <textarea class="form-control @error('catatan') is-invalid @enderror" 
+                  id="catatan" name="catatan" rows="3">{{ old('catatan') }}</textarea>
+        @error('catatan')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-success btn-lg">
+          <i class="fas fa-paper-plane me-2"></i>Kirim Booking Sekarang
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

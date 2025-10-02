@@ -10,20 +10,26 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'nama',
         'hp',
+        'email',
         'paket',
+        'ktp',
+        'kk',
         'bukti',
         'catatan',
-        'status', // pending / acc / ditolak
+        'status',
     ];
 
-    public function jamaah()
+    // Relasi ke user
+    public function user()
     {
-        return $this->belongsTo(Jamaah::class, 'nama', 'nama'); // contoh relasi sederhana
+        return $this->belongsTo(User::class);
     }
 
-    public function paketRelation()
+    // Relasi ke paket travel
+    public function paketTravel()
     {
         return $this->belongsTo(PaketTravel::class, 'paket', 'nama_paket');
     }

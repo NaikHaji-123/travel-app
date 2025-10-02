@@ -27,6 +27,7 @@ class BookingController extends Controller
             'paket'   => $request->paket,
             'bukti'   => $filePath,
             'catatan' => $request->catatan,
+            'status'  => 'pending', // ✅ default
         ]);
 
         return redirect()->back()->with('success', 'Booking berhasil dikirim!');

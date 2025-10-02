@@ -2,41 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\PaketTravel;
 use App\Models\Jamaah;
 use App\Models\Booking;
+use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Pendaftaran;
-
-$pendaftaran = Pendaftaran::with('user','paketTravel')->get();
-
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     // ========================
     // DASHBOARD ADMIN
     // ========================
-   public function index()
-{
-    $totalPaket = PaketTravel::count();
-    $totalJamaah = Jamaah::count();
-    $pakets = PaketTravel::all();
-    $jamaah = Jamaah::all();
-    $bookings = Booking::all();
-    $pendaftaran = Pendaftaran::with('user','paketTravel')->get(); // <- di sini
+    public function index()
+    {
+        $totalPaket = PaketTravel::count();
+        $totalJamaah = User::where('role', 'jamaah')->count();
+        $pakets = PaketTravel::all();
+        $jamaah = User::where('role', 'jamaah')->get();
+        $bookings = Booking::all();
+        $pendaftaran = Pendaftaran::with('user', 'paketTravel')->get();
 
-    return view('admin.dashboard', compact(
-        'totalPaket',
-        'totalJamaah',
-        'pakets',
-        'jamaah',
-        'bookings',
-        'pendaftaran'
-    ));
-}
-
+        return view('admin.dashboard', compact(
+            'totalPaket',
+            'totalJamaah',
+            'pakets',
+            'jamaah',
+            'bookings',
+            'pendaftaran'
+        ));
+    }
 
     // ========================
     // CRUD PAKET
@@ -165,5 +163,27 @@ class AdminController extends Controller
         $booking->save();
 
         return redirect()->back()->with('success','Booking ditolak.');
+    }
+
+    // ========================
+    // UBAH PASSWORD ADMIN
+    // ========================
+    public function ubahPassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|confirmed|min:6',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama salah']);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return back()->with('success', 'Password berhasil diubah!');
     }
 }

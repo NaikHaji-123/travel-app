@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\JamaahController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\InvoiceController;
+use App\Models\PaketTravel; // ✅ Jangan lupa import model
 
 // =======================
 // RESOURCE PAKET & JAMAAH
@@ -18,16 +20,20 @@ Route::resource('jamaah', JamaahController::class)->except(['index','create','ed
 // =======================
 // HALAMAN UMUM
 // =======================
-Route::get('/', fn() => view('jamaah.halamanutama'))->name('home');
+Route::get('/', function () {
+    $pakets = PaketTravel::all(); // ✅ Ambil semua paket
+    return view('jamaah.halamanutama', compact('pakets'));
+})->name('home');
 
-Route::get('/booking', fn() => view('jamaah.booking'))->middleware('auth')->name('booking');
+Route::get('/booking', fn() => view('jamaah.booking'))
+    ->middleware('auth')
+    ->name('booking');
 
 // =======================
 // AUTH
 // =======================
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -48,9 +54,10 @@ Route::middleware(['auth', 'jamaah'])->group(function () {
 // ADMIN (role admin)
 // =======================
 Route::middleware(['auth', 'admin'])->group(function () {
-    // Dashboard admin → gunakan index()
+    // Dashboard admin
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
+    // Pendaftar
     Route::get('/admin/pendaftar', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
     Route::post('/admin/pendaftar/{id}/verifikasi', [PendaftaranController::class, 'verifikasi'])->name('pendaftaran.verifikasi');
 
@@ -63,18 +70,27 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/jamaah', [AdminController::class, 'storeJamaah'])->name('jamaah.store');
     Route::put('/jamaah/{id}', [AdminController::class, 'updateJamaah'])->name('jamaah.update');
     Route::delete('/jamaah/{id}', [AdminController::class, 'destroyJamaah'])->name('jamaah.destroy');
+
+    // Booking ACC / Tolak
+    Route::post('/admin/booking/{id}/acc', [AdminController::class, 'bookingAcc'])->name('admin.booking.acc');
+    Route::post('/admin/booking/{id}/tolak', [AdminController::class, 'bookingTolak'])->name('admin.booking.tolak');
+
+    // Invoice
+    Route::get('/admin/invoice/{booking}', [InvoiceController::class, 'create'])->name('invoice.create');
 });
 
 // =======================
-// PAKET HAJI & UMRAH
+// PAKET HAJI & UMRAH (halaman statis)
 // =======================
 Route::get('/paket-umrah-reguler', fn() => view('jamaah.paketumrahreguler'))->name('paket.umrah.reguler');
 Route::get('/paket-umrah-turki', fn() => view('jamaah.paketumrahturki'))->name('paket.umrah.turki');
 Route::get('/paket-haji-khusus', fn() => view('jamaah.pakethajikhusus'))->name('paket.haji.khusus');
 Route::get('/paket-umrah-ramadhan', fn() => view('jamaah.paketumrahramadhan'))->name('paket.umrah.ramadhan');
 
-// Booking
+// =======================
+// BOOKING
+// =======================
 Route::middleware(['auth'])->group(function () {
     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 });
-Route::get('/admin/invoice/{booking}', [InvoiceController::class, 'create'])->name('invoice.create');
+Route::post('/admin/ubah-password', [AdminController::class, 'ubahPassword'])->name('admin.ubahPassword');

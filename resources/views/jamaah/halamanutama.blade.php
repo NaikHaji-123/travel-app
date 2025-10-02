@@ -137,36 +137,21 @@
 <!-- Paket -->
 <section id="paket" class="section">
   <div class="container">
-     <h2 class="fw-bold" style="color: #00d9ffff;">Paket haji & umrah</h2>
+    <h2 class="fw-bold" style="color: #00d9ffff;">Paket haji & umrah</h2>
     <div class="paket-scroll-container">
+      @foreach($pakets as $paket)
       <div class="paket-card">
-        <img src="{{ asset('img/umrah1.jpg') }}" alt="Umrah Reguler" />
-        <h3>Umrah Akhir Tahun 2025</h3>
-        <p>Rp 29.000.000</p>
-        <a href="{{ url('paket-umrah-reguler') }}" class="btn-detail">Detail</a>
+        @if($paket->gambar)
+        <img src="{{ asset('storage/'.$paket->gambar) }}" alt="{{ $paket->nama_paket }}">
+        @endif
+        <h3>{{ $paket->nama_paket }}</h3>
+        <p>Rp {{ number_format($paket->harga, 0, ',', '.') }}</p>
+        <a href="{{ url('paket/'.$paket->id) }}" class="btn-detail">Detail</a>
       </div>
-      <div class="paket-card">
-        <img src="{{ asset('img/umrah2.jpg') }}" alt="Umrah Turki" />
-        <h3>Umrah Plus Thaif</h3>
-        <p>Rp 30.000.000 atau 25.000.000</p>
-        <a href="{{ url('paket-umrah-turki') }}" class="btn-detail">Detail</a>
-      </div>
-      <div class="paket-card">
-        <img src="{{ asset('img/umrah3.jpg') }}" alt="Haji Khusus" />
-        <h3>Umrah Massal 12 Hari</h3>
-        <p>25.000.000</p>
-        <a href="{{ url('paket-haji-khusus') }}" class="btn-detail">Detail</a>
-      </div>
-      <div class="paket-card">
-        <img src="{{ asset('img/umrah4.jpg') }}" alt="Umrah Ramadhan" />
-        <h3>Umrah UMKM 9 Hari</h3>
-        <p>Rp 23.500.000</p>
-        <a href="{{ url('paket-umrah-ramadhan') }}" class="btn-detail">Detail</a>
-      </div>
+      @endforeach
     </div>
   </div>
 </section>
-
 <!-- Modal Paket -->
 <div class="modal" id="modalPaket">
   <div class="modal-content">
