@@ -10,6 +10,8 @@ return new class extends Migration
     {
         Schema::table('bookings', function (Blueprint $table) {
             $table->string('status')->default('pending');
+            $table->string('ktp')->nullable();   // kolom untuk menyimpan path file KTP
+            $table->string('kk')->nullable();    // kolom untuk menyimpan path file KK
         });
     }
 
@@ -17,6 +19,8 @@ return new class extends Migration
     {
         Schema::table('bookings', function (Blueprint $table) {
             $table->dropColumn('status');
+            $table->dropColumn('ktp');
+            $table->dropColumn('kk');
         });
     }
 };

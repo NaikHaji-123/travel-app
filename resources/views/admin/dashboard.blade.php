@@ -364,66 +364,81 @@
           </div>
         </div>
         <div class="tab-pane fade" id="booking">
-  <h5 class="mt-3">📋 Booking Jamaah</h5>
-  <div class="table-responsive">
-    <table class="table table-bordered align-middle">
-      <thead class="table-success">
-        <tr>
-          <th>Nama</th>
-          <th>HP</th>
-          <th>Paket</th>
-          <th>Bukti</th>
-          <th>Catatan</th>
-          <th>Status</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($bookings as $b)
-        <tr>
-          <td>{{ $b->nama }}</td>
-          <td>{{ $b->hp }}</td>
-          <td>{{ $b->paket }}</td>
-          <td>
-            @if($b->bukti)
-              <a href="{{ asset('storage/'.$b->bukti) }}" target="_blank">Lihat</a>
-            @else
-              -
-            @endif
-          </td>
-          <td>{{ $b->catatan ?? '-' }}</td>
-          <td>
-            @if($b->status == 'pending')
-              <span class="badge bg-warning">Pending</span>
-            @elseif($b->status == 'acc')
-              <span class="badge bg-success">ACC</span>
-            @else
-              <span class="badge bg-danger">Ditolak</span>
-            @endif
-          </td>
-          <td>
-            @if($b->status == 'pending')
-              <form action="{{ route('admin.booking.acc', $b->id) }}" method="POST" class="d-inline">
-                @csrf
-                <button class="btn btn-sm btn-success">ACC</button>
-              </form>
-              <form action="{{ route('admin.booking.tolak', $b->id) }}" method="POST" class="d-inline">
-                @csrf
-                <button class="btn btn-sm btn-danger">Tolak</button>
-              </form>
-            @elseif($b->status == 'acc')
-              <a href="{{ route('invoice.create', $b->id) }}" class="btn btn-sm btn-primary">Buat Invoice</a>
-            @endif
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+ <h5 class="mt-3">📋 Booking Jamaah</h5>
+<div class="table-responsive">
+  <table class="table table-bordered align-middle">
+    <thead class="table-success">
+      <tr>
+        <th>Nama</th>
+        <th>HP</th>
+        <th>Paket</th>
+        <th>KTP</th>
+        <th>KK</th>
+        <th>Bukti Transfer</th>
+        <th>Catatan</th>
+        <th>Status</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach($bookings as $booking)
+      <tr>
+        <td>{{ $booking->nama }}</td>
+        <td>{{ $booking->hp }}</td>
+        <td>{{ $booking->paket }}</td>
+        <td>
+          @if($booking->ktp)
+            <a href="{{ asset('storage/'.$booking->ktp) }}" target="_blank">Lihat KTP</a>
+          @else
+            -
+          @endif
+        </td>
+        <td>
+          @if($booking->kk)
+            <a href="{{ asset('storage/'.$booking->kk) }}" target="_blank">Lihat KK</a>
+          @else
+            -
+          @endif
+        </td>
+        <td>
+          @if($booking->bukti)
+            <a href="{{ asset('storage/'.$booking->bukti) }}" target="_blank">Lihat Bukti</a>
+          @else
+            -
+          @endif
+        </td>
+        <td>{{ $booking->catatan ?? '-' }}</td>
+        <td>
+          @if($booking->status == 'pending')
+            <span class="badge bg-warning">Pending</span>
+          @elseif($booking->status == 'acc')
+            <span class="badge bg-success">ACC</span>
+          @else
+            <span class="badge bg-danger">Ditolak</span>
+          @endif
+        </td>
+        <td>
+          @if($booking->status == 'pending')
+            <form action="{{ route('admin.booking.acc', $booking->id) }}" method="POST" class="d-inline">
+              @csrf
+              <button class="btn btn-sm btn-success">ACC</button>
+            </form>
+            <form action="{{ route('admin.booking.tolak', $booking->id) }}" method="POST" class="d-inline">
+              @csrf
+              <button class="btn btn-sm btn-danger">Tolak</button>
+            </form>
+          @elseif($booking->status == 'acc')
+            <a href="{{ route('invoice.create', $booking->id) }}" class="btn btn-sm btn-primary">Buat Invoice</a>
+          @endif
+        </td>
+      </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
 </div>
 
-
-   <!-- Profil Admin -->
+<!-- Profil Admin -->
 <div class="tab-pane fade" id="profil">
   <h5 class="mt-3 mb-3">👤 Profil Admin</h5>
   <div class="profile-card p-4 d-flex align-items-center gap-4" style="background-color: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
@@ -442,10 +457,13 @@
       <p class="mb-1 text-muted"><i class="bi bi-envelope"></i> {{ Auth::user()->email ?? '-' }}</p>
       <p class="mb-2 text-muted"><i class="bi bi-clock"></i> Terakhir Login: {{ Auth::user()->last_login ?? '-' }}</p>
       
-     <!-- Tombol Ubah Password -->
-<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#ubahPasswordModal">
-  Ubah Password
-</button>
+      <!-- Tombol Ubah Password -->
+      <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#ubahPasswordModal">
+        Ubah Password
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- Modal Ubah Password -->
 <div class="modal fade" id="ubahPasswordModal" tabindex="-1" aria-labelledby="ubahPasswordModalLabel" aria-hidden="true">
@@ -480,8 +498,42 @@
   </div>
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  const links = document.querySelectorAll('.sidebar a[data-bs-toggle="tab"]');
+  const tabs = document.querySelectorAll('.tab-pane');
+
+  // Cek tab terakhir dari localStorage
+  const lastTab = localStorage.getItem("lastTab");
+  if (lastTab) {
+    links.forEach(l => l.classList.remove("active"));
+    tabs.forEach(t => t.classList.remove("show","active"));
+    const targetLink = document.querySelector(`.sidebar a[href="${lastTab}"]`);
+    const targetTab = document.querySelector(lastTab);
+    if (targetLink && targetTab) {
+      targetLink.classList.add("active");
+      targetTab.classList.add("show","active");
+    }
+  }
+
+  // Simpan tab yang diklik ke localStorage
+  links.forEach(link => {
+    link.addEventListener("click", function(e){
+      e.preventDefault();
+      links.forEach(l => l.classList.remove("active"));
+      tabs.forEach(t => t.classList.remove("show","active"));
+      this.classList.add("active");
+      const targetId = this.getAttribute("href");
+      const targetTab = document.querySelector(targetId);
+      if (targetTab) targetTab.classList.add("show","active");
+      
+      // simpan state
+      localStorage.setItem("lastTab", targetId);
+    });
+  });
+
+
   const links = document.querySelectorAll('.sidebar a[data-bs-toggle="tab"]');
   const tabs = document.querySelectorAll('.tab-pane');
 

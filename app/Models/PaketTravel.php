@@ -13,15 +13,23 @@ class PaketTravel extends Model
         'deskripsi',
         'harga',
         'tanggal_berangkat',
-        'gambar', //
+        'gambar',
     ];
 
+    // Karena migration pakai date, cukup 'date'
     protected $casts = [
-        'tanggal_berangkat' => 'datetime', // ✅ Cast ke Carbon
-    ];
+    'tanggal_berangkat' => 'datetime',
+];
+
+
 
     public function pendaftarans()
     {
-        return $this->hasMany(Pendaftaran::class);
+        return $this->hasMany(Pendaftaran::class, 'paket_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'paket_id');
     }
 }

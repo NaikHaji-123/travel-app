@@ -132,8 +132,6 @@
   </div>
 </section>
 
-
-
 <!-- Paket -->
 <section id="paket" class="section">
   <div class="container">
@@ -348,7 +346,12 @@
 <!-- Footer -->
 <footer class="text-white text-center py-4" style="background-color: #87CEEB;">
   <div class="container">
-    <p class="mb-2">&copy; 2025 <strong>PT Syakirasya</strong>. All rights reserved.</p>
+    <footer class="text-center text-muted py-2" style="font-size: 0.85rem; border-top:1px solid #ccc;">
+  Travel Management System ® 2025 - Version 2.7.25 || PT. SYAKIRASYA WISATA MANDIRI © Hajj & Umroh Service
+  <br>
+  <a href="https://wa.me/62881012454138" target="_blank" class="text-decoration-none text-success">
+    Hubungi Developer - Version 2.7.25
+  </a>
     <div class="d-flex justify-content-center gap-4">
       <a href="https://instagram.com/syakirasyagroup" target="_blank" class="text-white fs-5">
         <i class="bi bi-instagram"></i> Instagram

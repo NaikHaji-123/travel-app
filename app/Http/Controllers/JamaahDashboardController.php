@@ -20,19 +20,28 @@ class JamaahDashboardController extends Controller
             ->latest()
             ->first();
 
+        // Kalau belum ada pendaftaran aktif, cek booking
+        if (!$pendaftaran) {
+            $pendaftaran = Booking::with('paketTravel')
+                ->where('user_id', $user->id)
+                ->where('status', 'acc')
+                ->latest()
+                ->first();
+        }
+
         // Riwayat pendaftaran
         $riwayatPendaftaran = Pendaftaran::with('paketTravel')
             ->where('user_id', $user->id)
-            ->orderBy('created_at','desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         // Riwayat booking
         $riwayatBooking = Booking::with('paketTravel')
             ->where('user_id', $user->id)
-            ->orderBy('created_at','desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        // Gabungkan semua riwayat
+        // Gabungkan
         $riwayat = $riwayatPendaftaran->concat($riwayatBooking)->sortByDesc('created_at');
 
         // Semua paket
