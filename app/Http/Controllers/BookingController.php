@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -25,6 +26,7 @@ class BookingController extends Controller
         $buktiPath = $request->hasFile('bukti') ? $request->file('bukti')->store('bukti_transfer', 'public') : null;
 
         Booking::create([
+             'user_id' => Auth::id(),   // ✅ tambahkan ini
             'nama'    => $request->nama,
             'hp'      => $request->hp,
             'paket'   => $request->paket,
