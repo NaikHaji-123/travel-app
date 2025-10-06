@@ -7,18 +7,25 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Jalankan migrasi.
      */
     public function up(): void
     {
         Schema::create('karyawans', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->string('jabatan'); // Contoh kolom tambahan
+            $table->string('email')->unique();
+            $table->string('no_hp')->nullable();
+            $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Rollback migrasi.
      */
     public function down(): void
     {

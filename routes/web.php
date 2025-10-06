@@ -9,19 +9,19 @@ use App\Http\Controllers\PaketController;
 use App\Http\Controllers\JamaahController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\InvoiceController;
-use App\Models\PaketTravel; // ✅ Jangan lupa import model
+use App\Models\PaketTravel;
 
 // =======================
 // RESOURCE PAKET & JAMAAH
 // =======================
-Route::resource('paket', PaketController::class)->except(['index','create','edit','show']);
-Route::resource('jamaah', JamaahController::class)->except(['index','create','edit','show']);
+Route::resource('paket', PaketController::class)->except(['index', 'create', 'edit', 'show']);
+Route::resource('jamaah', JamaahController::class)->except(['index', 'create', 'edit', 'show']);
 
 // =======================
 // HALAMAN UMUM
 // =======================
 Route::get('/', function () {
-    $pakets = PaketTravel::all(); // ✅ Ambil semua paket
+    $pakets = PaketTravel::all();
     return view('jamaah.halamanutama', compact('pakets'));
 })->name('home');
 
@@ -61,22 +61,34 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/pendaftar', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
     Route::post('/admin/pendaftar/{id}/verifikasi', [PendaftaranController::class, 'verifikasi'])->name('pendaftaran.verifikasi');
 
-    // CRUD paket
+    // CRUD Paket
     Route::post('/paket', [AdminController::class, 'storePaket'])->name('paket.store');
     Route::put('/paket/{id}', [AdminController::class, 'updatePaket'])->name('paket.update');
     Route::delete('/paket/{id}', [AdminController::class, 'destroyPaket'])->name('paket.destroy');
 
-    // CRUD jamaah
+    // CRUD Jamaah
     Route::post('/jamaah', [AdminController::class, 'storeJamaah'])->name('jamaah.store');
     Route::put('/jamaah/{id}', [AdminController::class, 'updateJamaah'])->name('jamaah.update');
     Route::delete('/jamaah/{id}', [AdminController::class, 'destroyJamaah'])->name('jamaah.destroy');
 
+    // CRUD Karyawan
+    Route::post('/karyawan', [AdminController::class, 'storeKaryawan'])->name('karyawan.store');
+    Route::put('/karyawan/{id}', [AdminController::class, 'updateKaryawan'])->name('karyawan.update');
+    Route::delete('/karyawan/{id}', [AdminController::class, 'destroyKaryawan'])->name('karyawan.destroy');
+
+    // CRUD Agent
+    Route::post('/agent', [AdminController::class, 'storeAgent'])->name('agent.store');
+    Route::put('/agent/{id}', [AdminController::class, 'updateAgent'])->name('agent.update');
+    Route::delete('/agent/{id}', [AdminController::class, 'destroyAgent'])->name('agent.destroy');
     // Booking ACC / Tolak
     Route::post('/admin/booking/{id}/acc', [AdminController::class, 'bookingAcc'])->name('admin.booking.acc');
     Route::post('/admin/booking/{id}/tolak', [AdminController::class, 'bookingTolak'])->name('admin.booking.tolak');
 
     // Invoice
     Route::get('/admin/invoice/{booking}', [InvoiceController::class, 'create'])->name('invoice.create');
+
+    // Ubah password admin
+    Route::post('/admin/ubah-password', [AdminController::class, 'ubahPassword'])->name('admin.ubahPassword');
 });
 
 // =======================
@@ -93,4 +105,3 @@ Route::get('/paket-umrah-ramadhan', fn() => view('jamaah.paketumrahramadhan'))->
 Route::middleware(['auth'])->group(function () {
     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 });
-Route::post('/admin/ubah-password', [AdminController::class, 'ubahPassword'])->name('admin.ubahPassword');
