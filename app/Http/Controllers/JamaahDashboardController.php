@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Pendaftaran;
 use App\Models\PaketTravel;
 use App\Models\Booking;
+use App\Models\Transaksi;
 
 class JamaahDashboardController extends Controller
 {
@@ -13,14 +14,12 @@ class JamaahDashboardController extends Controller
     {
         $user = Auth::user();
 
-        // Pendaftaran aktif
-        $pendaftaran = Pendaftaran::with(['paketTravel', 'pembayaran'])
+        $pendaftaran = Pendaftaran::with('paketTravel')
             ->where('user_id', $user->id)
             ->whereIn('status', ['Pending', 'Lunas'])
             ->latest()
             ->first();
 
-        // Kalau belum ada pendaftaran aktif, cek booking
         if (!$pendaftaran) {
             $pendaftaran = Booking::with('paketTravel')
                 ->where('user_id', $user->id)
@@ -29,24 +28,39 @@ class JamaahDashboardController extends Controller
                 ->first();
         }
 
-        // Riwayat pendaftaran
+        $totalPembayaran = Transaksi::where('user_id', $user->id)
+            ->where('status', 'acc')
+            ->sum('jumlah');
+
         $riwayatPendaftaran = Pendaftaran::with('paketTravel')
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Riwayat booking
         $riwayatBooking = Booking::with('paketTravel')
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Gabungkan
         $riwayat = $riwayatPendaftaran->concat($riwayatBooking)->sortByDesc('created_at');
-
-        // Semua paket
         $pakets = PaketTravel::all();
 
-        return view('jamaah.dashboard_jamaah', compact('user', 'pendaftaran', 'riwayat', 'pakets'));
+        return view('jamaah.dashboard_jamaah', compact(
+            'user',
+            'pendaftaran',
+            'riwayat',
+            'pakets',
+            'totalPembayaran'
+        ));
     }
+
+    // ⬇️ ini harus di luar function index()
+   public function showTransaksi($id)
+{
+    $transaksi = Transaksi::with(['pendaftaran.paketTravel', 'booking'])
+        ->findOrFail($id);
+
+    return view('jamaah.transaksi-detail', compact('transaksi'));
+}
+
 }

@@ -186,12 +186,9 @@
                             <span class="status-badge bg-{{ $color }} text-white">{{ $status }}</span>
                         </p>
                         
-                        <p><i class="bi bi-cash-coin me-2 text-success"></i> 
-                            <strong>Total Pembayaran Terkumpul:</strong>
-                            <span class="text-success fw-bold d-block mt-1">
-                                Rp {{ number_format(optional($pendaftaran->pembayaran)->jumlah ?? 0, 0, ',', '.') }}
-                            </span>
-                        </p>
+                       <p>Total Pembayaran Terkumpul: Rp {{ number_format($totalPembayaran, 0, ',', '.') }}</p>
+
+
                     </div>
                 </div>
                 <small class="text-muted mt-3 d-block fst-italic">Hubungi admin untuk mengunggah dokumen atau konfirmasi pembayaran.</small>
@@ -218,33 +215,52 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($riwayat as $r)
-                                    <tr>
-                                        <td class="text-start ps-4 fw-medium">{{ $r->paketTravel->nama_paket ?? $r->paket ?? '-' }}</td>
-                                        <td class="text-center">
-                                            {{ $r->paketTravel && $r->paketTravel->tanggal_berangkat 
-                                                ? $r->paketTravel->tanggal_berangkat->format('d/m/Y') 
-                                                : '-' }}
-                                        </td>
-                                        <td class="text-center">
-                                            @php
-                                                $status = $r->status ?? '-';
-                                                $color = [
-                                                    'Lunas' => 'success', 
-                                                    'Pending' => 'warning', 
-                                                    'Batal' => 'danger',
-                                                    'Terkonfirmasi' => 'primary'
-                                                ][$status] ?? 'secondary';
-                                            @endphp
-                                            <span class="badge bg-{{ $color }} status-badge">{{ $status }}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Lihat detail pembayaran dan dokumen">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                             @foreach ($riwayat as $r)
+    @php
+        // Skip data kosong (tanpa paket & tanpa nama)
+        if (
+            empty($r->paketTravel) &&
+            empty($r->paket)
+        ) continue;
+    @endphp
+
+    <tr>
+        {{-- Nama Paket --}}
+        <td class="text-start ps-4 fw-medium">
+            {{ $r->paketTravel->nama_paket ?? $r->paket ?? '-' }}
+        </td>
+
+        {{-- Tanggal Berangkat --}}
+        <td class="text-center">
+            @php
+                $tanggal = $r->paketTravel->tanggal_berangkat ?? $r->tanggal_berangkat ?? null;
+            @endphp
+            {{ $tanggal ? \Carbon\Carbon::parse($tanggal)->format('d/m/Y') : '-' }}
+        </td>
+
+        {{-- Status --}}
+        <td class="text-center">
+            @php
+                $status = ucfirst($r->status ?? '-');
+                $color = match ($status) {
+                    'Lunas' => 'success',
+                    'Pending' => 'warning',
+                    'Batal' => 'danger',
+                    'Acc', 'Terkonfirmasi' => 'primary',
+                    default => 'secondary',
+                };
+            @endphp
+            <span class="badge bg-{{ $color }}">{{ $status }}</span>
+        </td>
+
+        {{-- Tombol Detail --}}
+        <td class="text-center">
+            <a href="{{ route('jamaah.transaksi.show', $r->id) }}" class="btn btn-sm btn-outline-primary" title="Lihat detail pembayaran">
+    <i class="bi bi-eye"></i>
+</a>
+        </td>
+    </tr>
+@endforeach
                             </tbody>
                         </table>
                     </div>

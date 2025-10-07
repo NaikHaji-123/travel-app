@@ -27,6 +27,7 @@ class BookingController extends Controller
 
         Booking::create([
              'user_id' => Auth::id(),   // ✅ tambahkan ini
+             'paket_id' => $request->paket_id,
             'nama'    => $request->nama,
             'hp'      => $request->hp,
             'paket'   => $request->paket,

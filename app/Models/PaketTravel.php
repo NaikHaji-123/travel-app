@@ -17,10 +17,9 @@ class PaketTravel extends Model
     ];
 
     // Karena migration pakai date, cukup 'date'
-    protected $casts = [
-    'tanggal_berangkat' => 'datetime',
+  protected $casts = [
+    'tanggal_berangkat' => 'date',
 ];
-
 
 
     public function pendaftarans()

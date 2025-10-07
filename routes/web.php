@@ -37,6 +37,9 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/jamaah/transaksi/{id}', [App\Http\Controllers\JamaahDashboardController::class, 'showTransaksi'])
+    ->name('jamaah.transaksi.show');
+
 
 // =======================
 // JAMAAH (role jamaah)

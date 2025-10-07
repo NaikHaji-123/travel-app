@@ -21,4 +21,13 @@ class Pendaftaran extends Model
     {
         return $this->hasOne(Pembayaran::class, 'pendaftaran_id');
     }
+    public function transaksi()
+{
+    return $this->hasMany(Transaksi::class, 'pendaftaran_id');
+}
+
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }

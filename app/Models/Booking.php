@@ -11,6 +11,7 @@ class Booking extends Model
 
     protected $fillable = [
         'user_id',
+        'paket_id',
         'nama',
         'hp',
         'email',
@@ -30,7 +31,14 @@ class Booking extends Model
 
     // Relasi ke paket travel
     public function paketTravel()
-    {
-        return $this->belongsTo(PaketTravel::class, 'paket', 'nama_paket');
-    }
+{
+    return $this->belongsTo(PaketTravel::class, 'paket_id');
+}
+
+public function transaksi()
+{
+    return $this->hasMany(Transaksi::class, 'booking_id');
+}
+
+
 }
