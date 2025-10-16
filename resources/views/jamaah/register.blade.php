@@ -64,16 +64,34 @@
       <h4 class="mt-2">Pendaftaran Jamaah</h4>
     </div>
 
+    @if ($errors->any())
+  <div class="alert alert-danger">
+    <ul class="mb-0">
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
+
     <form method="POST" action="{{ route('register.post') }}">
       @csrf
       <div class="mb-3">
         <label for="name" class="form-label">Nama Lengkap</label>
-        <input type="text" name="name" class="form-control" id="name" placeholder="Contoh: Ahmad Fauzi" required />
+       <input type="text" name="name" class="form-control" id="name" placeholder="Contoh: Ahmad Fauzi" required />
+
       </div>
       <div class="mb-3">
         <label for="email" class="form-label">Email / Username</label>
         <input type="email" name="email" class="form-control" id="email" placeholder="nama@email.com" required />
       </div>
+
+      <div class="mb-3">
+  <label for="no_hp" class="form-label">Nomor HP</label>
+  <input type="text" name="no_hp" class="form-control" id="no_hp" placeholder="Contoh: 081234567890" required />
+</div>
+
       <div class="mb-3">
         <label for="password" class="form-label">Kata Sandi</label>
         <input type="password" name="password" class="form-control" id="password" placeholder="Minimal 6 karakter" required />

@@ -81,7 +81,8 @@
       <p class="lead">Perjalanan Haji dan Umrah dengan pelayanan terbaik & terpercaya</p>
       
       <!-- Tombol Booking -->
-      <a href="{{ route('booking') }}" class="btn btn-lg rounded-pill mt-3 me-2 btn-sky">
+      <a href="{{ route('pendaftaran.form', $paket->id ?? 1) }}" class="btn btn-lg rounded-pill mt-3 me-2 btn-sky">
+
   🛫 Booking Sekarang
 </a>
     </div>

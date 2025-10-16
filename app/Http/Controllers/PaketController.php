@@ -38,4 +38,11 @@ class PaketController extends Controller
         PaketTravel::findOrFail($id)->delete();
         return back()->with('success', 'Paket berhasil dihapus!');
     }
+
+    // ✅ Tambahkan method show() ini
+    public function show($id)
+    {
+        $paket = PaketTravel::findOrFail($id);
+        return view('jamaah.detailpaket', compact('paket'));
+    }
 }

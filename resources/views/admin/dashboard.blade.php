@@ -146,6 +146,10 @@
                 <a href="#booking" class="list-group-item list-group-item-action" data-bs-toggle="tab">
                     <i class="bi bi-journal-check me-2"></i> Booking Jamaah
                 </a>
+               <a href="#transaksi" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                     <i class="bi bi-journal-check me-2"></i> Transaksi
+                </a>
+
                 <a href="#karyawan" class="list-group-item list-group-item-action" data-bs-toggle="tab">
                     <i class="bi bi-person-workspace me-2"></i> Data Karyawan
                 </a>
@@ -450,182 +454,352 @@
                                     <th>Nama & HP</th>
                                     <th>Paket</th>
                                     <th>Dokumen (KTP/KK)</th>
-                                    <th>Bukti Transfer</th>
                                     <th>Catatan</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($bookings as $booking)
-                                <tr>
-                                    <td>
-                                        <span class="fw-medium">{{ $booking->nama }}</span><br>
-                                        <small class="text-muted">{{ $booking->hp }}</small>
-                                    </td>
-                                    <td>{{ $booking->paket }}</td>
-                                    <td>
-                                        @if($booking->ktp)<a href="{{ asset('storage/'.$booking->ktp) }}" target="_blank" class="badge bg-primary me-1"><i class="bi bi-file-text-fill"></i> KTP</a>@else - @endif
-                                        @if($booking->kk)<a href="{{ asset('storage/'.$booking->kk) }}" target="_blank" class="badge bg-primary"><i class="bi bi-file-text-fill"></i> KK</a>@else - @endif
-                                    </td>
-                                    <td>
-                                        @if($booking->bukti)
-                                            <a href="{{ asset('storage/'.$booking->bukti) }}" target="_blank" class="btn btn-sm btn-outline-success"><i class="bi bi-download"></i> Lihat</a>
-                                        @else
-                                            <span class="text-danger">Belum Ada</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $booking->catatan ?? '-' }}</td>
-                                    <td>
-                                        @if($booking->status == 'pending')
-                                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i> Pending</span>
-                                        @elseif($booking->status == 'acc')
-                                            <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> ACC</span>
-                                        @else
-                                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i> Ditolak</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($booking->status == 'pending')
-                                            <form action="{{ route('admin.booking.acc', $booking->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <button class="btn btn-sm btn-success mb-1" title="Setujui Booking"><i class="bi bi-check"></i> ACC</button>
-                                            </form>
-                                            <form action="{{ route('admin.booking.tolak', $booking->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <button class="btn btn-sm btn-danger mb-1" title="Tolak Booking"><i class="bi bi-x"></i> Tolak</button>
-                                            </form>
-                                        @elseif($booking->status == 'acc')
-                                            <a href="{{ route('invoice.create', $booking->id) }}" class="btn btn-sm btn-primary" title="Buat Dokumen Invoice"><i class="bi bi-file-earmark-text-fill"></i> Invoice</a>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach
+                                @foreach($pendaftaran as $item)
+<tr>
+    <td>
+        <span class="fw-medium">{{ $item->user->nama }}</span><br>
+        <small class="text-muted">{{ $item->user->no_hp }}</small>
+    </td>
+    <td>{{ $item->paketTravel->nama_paket }}</td>
+    <td>
+        @if($item->ktp)
+            <a href="{{ asset('storage/'.$item->ktp) }}" target="_blank" class="badge bg-primary me-1">
+                <i class="bi bi-file-text-fill"></i> KTP
+            </a>
+        @else
+            -
+        @endif
+
+        @if($item->kk)
+            <a href="{{ asset('storage/'.$item->kk) }}" target="_blank" class="badge bg-primary">
+                <i class="bi bi-file-text-fill"></i> KK
+            </a>
+        @else
+            -
+        @endif
+    </td>
+    <td>{{ $item->catatan ?? '-' }}</td>
+    <td>
+        @if($item->status == 'pending')
+            <span class="badge bg-warning text-dark">
+                <i class="bi bi-hourglass-split me-1"></i> Pending
+            </span>
+        @elseif($item->status == 'acc')
+            <span class="badge bg-success">
+                <i class="bi bi-check-circle-fill me-1"></i> ACC
+            </span>
+        @else
+            <span class="badge bg-danger">
+                <i class="bi bi-x-circle-fill me-1"></i> Ditolak
+            </span>
+        @endif
+    </td>
+    <td>
+        @if($item->status == 'pending')
+            <form action="{{ route('admin.pendaftaran.acc', $item->id) }}" method="POST" class="d-inline">
+                @csrf
+                <button class="btn btn-sm btn-success mb-1" title="Setujui Pendaftaran">
+                    <i class="bi bi-check"></i> ACC
+                </button>
+            </form>
+
+            <form action="{{ route('admin.pendaftaran.tolak', $item->id) }}" method="POST" class="d-inline">
+                @csrf
+                <button class="btn btn-sm btn-danger mb-1" title="Tolak Pendaftaran">
+                    <i class="bi bi-x"></i> Tolak
+                </button>
+            </form>
+        @elseif($item->status == 'acc')
+           <a href="{{ route('invoice.create', $item->id) }}" class="btn btn-sm btn-primary" title="Buat Dokumen Invoice">
+    <i class="bi bi-file-earmark-text-fill"></i> Invoice
+</a>
+
+        @endif
+    </td>
+</tr>
+@endforeach
+
+
                             </tbody>
                         </table>
                     </div>
                 </div>
+               </div> <!-- penutup tab booking -->
 
-                <div class="tab-pane fade" id="karyawan">
-                    <h5 class="mt-3 mb-3 text-secondary"><i class="bi bi-person-workspace me-2"></i> Manajemen Data Karyawan</h5>
-                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#tambahKaryawanModal">
-                        <i class="bi bi-person-plus-fill me-1"></i> Tambah Karyawan
-                    </button>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Nama</th>
-                                    <th>Jabatan</th>
-                                    <th>Email</th>
-                                    <th>No. HP</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{-- Loop data karyawan (asumsi variabel $karyawan tersedia) --}}
-                                @foreach($karyawan as $k)
-                                <tr>
-                                    <td class="fw-medium">{{ $k->nama }}</td>
-                                    <td>{{ $k->jabatan ?? 'Staf' }}</td>
-                                    <td>{{ $k->email }}</td>
-                                    <td>{{ $k->no_hp }}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal" data-bs-target="#editKaryawanModal{{ $k->id }}"><i class="bi bi-pencil-square"></i></button>
-                                        <form action="{{ route('karyawan.destroy',$k->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus karyawan ini?')"><i class="bi bi-trash-fill"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
+<!-- ========================= TAB TRANSAKSI ========================= -->
+<div class="tab-pane fade" id="transaksi" role="tabpanel" aria-labelledby="transaksi-tab">
+    <h5 class="mt-3 mb-3 text-secondary">
+        <i class="bi bi-wallet2 me-2"></i> Data Transaksi Jamaah
+    </h5>
 
-                                <div class="modal fade" id="editKaryawanModal{{ $k->id }}" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <form action="{{ route('karyawan.update',$k->id) }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-info text-white">
-                                                    <h5 class="modal-title">Edit Karyawan: {{ $k->nama }}</h5>
-                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-medium">Nama</label>
-                                                        <input type="text" name="nama" class="form-control" value="{{ $k->nama }}" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-medium">Jabatan</label>
-                                                        <input type="text" name="jabatan" class="form-control" value="{{ $k->jabatan ?? 'Staf' }}" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-medium">Email</label>
-                                                        <input type="email" name="email" class="form-control" value="{{ $k->email }}" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-medium">No. HP</label>
-                                                        <input type="text" name="no_hp" class="form-control" value="{{ $k->no_hp }}" required>
-                                                    </div>
-                                                    <small class="text-muted d-block mt-3">Kosongkan kolom password jika tidak ingin mengubahnya.</small>
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-medium">Password Baru</label>
-                                                        <input type="password" name="password" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                    <button type="submit" class="btn btn-info text-white">Simpan Perubahan</button>
-                                                </div>
-                                            </div>
-                                        </form>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Jamaah</th>
+                            <th>Paket</th>
+                            <th>Jumlah</th>
+                            <th>Status</th>
+                            <th>Jenis Pembayaran</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($transaksis as $index => $t)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $t->user->nama ?? '-' }}</td>
+                            <td>{{ $t->pendaftaran->paketTravel->nama_paket ?? '-' }}</td>
+                            <td>Rp {{ number_format($t->jumlah, 0, ',', '.') }}</td>
+                            <td>
+                                @if ($t->status == 'pending')
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                @elseif ($t->status == 'acc')
+                                    <span class="badge bg-success">Acc</span>
+                                @else
+                                    <span class="badge bg-secondary">{{ ucfirst($t->status) }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($t->jenis_pembayaran == 'dp')
+                                    <span class="badge bg-info text-dark">DP</span>
+                                @elseif ($t->jenis_pembayaran == 'tabungan')
+                                    <span class="badge bg-primary">Tabungan</span>
+                                @elseif ($t->jenis_pembayaran == 'lunas')
+                                    <span class="badge bg-success">Lunas</span>
+                                @else
+                                    <span class="badge bg-secondary">-</span>
+                                @endif
+                            </td>
+                            <td class="d-flex gap-1">
+                                {{-- Ubah Status --}}
+                                <form action="{{ route('transaksi.updateStatus', $t->id) }}" method="POST">
+                                    @csrf
+                                    <select name="status" onchange="this.form.submit()" class="form-select form-select-sm">
+                                        <option value="pending" {{ $t->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="acc" {{ $t->status == 'acc' ? 'selected' : '' }}>Acc</option>
+                                    </select>
+                                </form>
+
+                                {{-- Edit Nominal --}}
+                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editTransaksiModal{{ $t->id }}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+
+                                {{-- Tambah Nominal --}}
+                                <button type="button" class="btn btn-sm btn-outline-success"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#tambahTransaksiModal{{ $t->id }}">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- ========== Modal Edit Transaksi ========== -->
+                        <div class="modal fade" id="editTransaksiModal{{ $t->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form action="{{ route('transaksi.updateNominal', $t->id) }}" method="POST">
+                                    @csrf
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title">Edit Nominal Transaksi</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <label>Nominal (Rp)</label>
+                                            <input type="number" name="jumlah" class="form-control" value="{{ $t->jumlah }}" required>
+
+                                            <label class="mt-3">Jenis Pembayaran</label>
+                                            <select name="jenis_pembayaran" class="form-select">
+                                                <option value="dp" {{ $t->jenis_pembayaran == 'dp' ? 'selected' : '' }}>DP</option>
+                                                <option value="tabungan" {{ $t->jenis_pembayaran == 'tabungan' ? 'selected' : '' }}>Tabungan</option>
+                                                <option value="lunas" {{ $t->jenis_pembayaran == 'lunas' ? 'selected' : '' }}>Lunas</option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                        </div>
                                     </div>
-                                </div>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                </form>
+                            </div>
+                        </div>
 
-                <div class="modal fade" id="tambahKaryawanModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <form action="{{ route('karyawan.store') }}" method="POST">
+                        <!-- ========== Modal Tambah Nominal ========== -->
+                        <div class="modal fade" id="tambahTransaksiModal{{ $t->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form action="{{ route('transaksi.tambahNominal', $t->id) }}" method="POST">
+                                    @csrf
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-success text-white">
+                                            <h5 class="modal-title">Tambah Nominal Transaksi</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <label>Tambah Nominal (Rp)</label>
+                                            <input type="number" name="tambah_jumlah" class="form-control" placeholder="Masukkan nominal tambahan" required>
+
+                                            <label class="mt-3">Jenis Pembayaran</label>
+                                            <select name="jenis_pembayaran" class="form-select">
+                                                <option value="tabungan">Tabungan</option>
+                                                <option value="lunas">Lunas</option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-success">Tambah</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">Belum ada transaksi</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================= TAB KARYAWAN ========================= -->
+<div class="tab-pane fade" id="karyawan" role="tabpanel" aria-labelledby="karyawan-tab">
+    <h5 class="mt-3 mb-3 text-secondary">
+        <i class="bi bi-person-workspace me-2"></i> Manajemen Data Karyawan
+    </h5>
+
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#tambahKaryawanModal">
+        <i class="bi bi-person-plus-fill me-1"></i> Tambah Karyawan
+    </button>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Nama</th>
+                    <th>Jabatan</th>
+                    <th>Email</th>
+                    <th>No. HP</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($karyawan as $k)
+                <tr>
+                    <td class="fw-medium">{{ $k->nama }}</td>
+                    <td>{{ $k->jabatan ?? 'Staf' }}</td>
+                    <td>{{ $k->email }}</td>
+                    <td>{{ $k->no_hp }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal" data-bs-target="#editKaryawanModal{{ $k->id }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <form action="{{ route('karyawan.destroy', $k->id) }}" method="POST" class="d-inline">
                             @csrf
+                            @method('DELETE')
+                            <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus karyawan ini?')">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                <!-- Modal Edit -->
+                <div class="modal fade" id="editKaryawanModal{{ $k->id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="{{ route('karyawan.update', $k->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
                             <div class="modal-content">
-                                <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title">Tambah Karyawan Baru</h5>
+                                <div class="modal-header bg-info text-white">
+                                    <h5 class="modal-title">Edit Karyawan: {{ $k->nama }}</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label fw-medium">Nama</label>
-                                        <input type="text" name="nama" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-medium">Jabatan</label>
-                                        <input type="text" name="jabatan" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-medium">Email</label>
-                                        <input type="email" name="email" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-medium">No. HP</label>
-                                        <input type="text" name="no_hp" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-medium">Password (Awal)</label>
-                                        <input type="password" name="password" class="form-control" required>
-                                    </div>
+                                    <label>Nama</label>
+                                    <input type="text" name="nama" class="form-control mb-2" value="{{ $k->nama }}" required>
+
+                                    <label>Jabatan</label>
+                                    <input type="text" name="jabatan" class="form-control mb-2" value="{{ $k->jabatan }}" required>
+
+                                    <label>Email</label>
+                                    <input type="email" name="email" class="form-control mb-2" value="{{ $k->email }}" required>
+
+                                    <label>No. HP</label>
+                                    <input type="text" name="no_hp" class="form-control mb-2" value="{{ $k->no_hp }}" required>
+
+                                    <small class="text-muted">Kosongkan password jika tidak diubah.</small>
+                                    <input type="password" name="password" class="form-control mt-1" placeholder="Password baru">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-primary">Tambah Karyawan</button>
+                                    <button type="submit" class="btn btn-info text-white">Simpan</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
+                @empty
+                <tr>
+                    <td colspan="5" class="text-center text-muted">Belum ada data karyawan</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Tambah Karyawan -->
+<div class="modal fade" id="tambahKaryawanModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('karyawan.store') }}" method="POST">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Tambah Karyawan Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Nama</label>
+                    <input type="text" name="nama" class="form-control mb-2" required>
+
+                    <label>Jabatan</label>
+                    <input type="text" name="jabatan" class="form-control mb-2" required>
+
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-control mb-2" required>
+
+                    <label>No. HP</label>
+                    <input type="text" name="no_hp" class="form-control mb-2" required>
+
+                    <label>Password Awal</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Tambah</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 
                 <div class="tab-pane fade" id="agent">
                     <h5 class="mt-3 mb-3 text-secondary"><i class="bi bi-person-badge-fill me-2"></i> Manajemen Data Agent</h5>
@@ -660,7 +834,6 @@
                                         </form>
                                     </td>
                                 </tr>
-
                                 <div class="modal fade" id="editAgentModal{{ $a->id }}" tabindex="-1">
                                     <div class="modal-dialog">
                                         <form action="{{ route('agent.update',$a->id) }}" method="POST">

@@ -8,26 +8,31 @@ class Pendaftaran extends Model
 {
     protected $fillable = [
         'user_id',
-        'paket_id',
+        'paket_travel_id',
+        'ktp',
+        'kk',
+        'bukti',
+        'catatan',
         'status',
     ];
 
     public function paketTravel()
     {
-        return $this->belongsTo(PaketTravel::class, 'paket_id');
+        return $this->belongsTo(PaketTravel::class, 'paket_travel_id');
     }
 
     public function pembayaran()
     {
         return $this->hasOne(Pembayaran::class, 'pendaftaran_id');
     }
-    public function transaksi()
-{
-    return $this->hasMany(Transaksi::class, 'pendaftaran_id');
-}
 
-public function user()
-{
-    return $this->belongsTo(User::class);
-}
+    public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'pendaftaran_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

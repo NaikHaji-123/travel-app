@@ -61,23 +61,26 @@ class AuthController extends Controller
      * Proses register
      */
     public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:6|confirmed',
+        'no_hp' => 'required|string|max:20', // tambahkan validasi hp
+    ]);
 
-        $user = User::create([
-            'nama' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'jamaah', // default role
-        ]);
+    $user = User::create([
+        'nama' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'no_hp' => $request->no_hp, // tambahkan ini 👈
+        'role' => 'jamaah',
+    ]);
 
-        Auth::login($user);
+    Auth::login($user);
 
-        return redirect()->route('jamaah.dashboard');
-    }
+    return redirect()->route('jamaah.dashboard');
+}
+
 }
 

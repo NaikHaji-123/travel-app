@@ -5,8 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\JamaahDashboardController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PaketController;
-use App\Http\Controllers\JamaahController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\InvoiceController;
 use App\Models\PaketTravel;
@@ -14,8 +14,8 @@ use App\Models\PaketTravel;
 // =======================
 // RESOURCE PAKET & JAMAAH
 // =======================
-Route::resource('paket', PaketController::class)->except(['index', 'create', 'edit', 'show']);
-Route::resource('jamaah', JamaahController::class)->except(['index', 'create', 'edit', 'show']);
+//Route::resource('paket', PaketController::class)->except(['index', 'create', 'edit', 'show']);
+//Route::resource('jamaah', JamaahController::class)->except(['index', 'create', 'edit', 'show']);
 
 // =======================
 // HALAMAN UMUM
@@ -25,9 +25,12 @@ Route::get('/', function () {
     return view('jamaah.halamanutama', compact('pakets'));
 })->name('home');
 
-Route::get('/booking', fn() => view('jamaah.booking'))
-    ->middleware('auth')
-    ->name('booking');
+Route::get('/paket/{id}', [PaketController::class, 'show'])->name('paket.show');
+
+
+// Route::get('/booking', fn() => view('jamaah.booking'))
+//     ->middleware('auth')
+//     ->name('booking');
 
 // =======================
 // AUTH
@@ -49,7 +52,7 @@ Route::middleware(['auth', 'jamaah'])->group(function () {
     Route::get('/jamaah/portal', fn() => view('jamaah.portal'))->name('jamaah.portal');
 
     // Daftar paket / booking
-    Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.form');
+  Route::get('/pendaftaran/{paket}', [PendaftaranController::class, 'create'])->name('pendaftaran.form');
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 });
 
@@ -83,15 +86,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/agent', [AdminController::class, 'storeAgent'])->name('agent.store');
     Route::put('/agent/{id}', [AdminController::class, 'updateAgent'])->name('agent.update');
     Route::delete('/agent/{id}', [AdminController::class, 'destroyAgent'])->name('agent.destroy');
-    // Booking ACC / Tolak
-    Route::post('/admin/booking/{id}/acc', [AdminController::class, 'bookingAcc'])->name('admin.booking.acc');
-    Route::post('/admin/booking/{id}/tolak', [AdminController::class, 'bookingTolak'])->name('admin.booking.tolak');
+    // Pendaftaran ACC / Tolak
+Route::post('/admin/pendaftaran/{id}/acc', [AdminController::class, 'accPendaftaran'])->name('admin.pendaftaran.acc');
+Route::post('/admin/pendaftaran/{id}/tolak', [AdminController::class, 'tolakPendaftaran'])->name('admin.pendaftaran.tolak');
 
-    // Invoice
-    Route::get('/admin/invoice/{booking}', [InvoiceController::class, 'create'])->name('invoice.create');
+// INVOICE
+Route::get('/admin/invoice/{pendaftaran}', [InvoiceController::class, 'create'])->name('invoice.create');
 
     // Ubah password admin
     Route::post('/admin/ubah-password', [AdminController::class, 'ubahPassword'])->name('admin.ubahPassword');
+
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::post('/admin/transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
+    Route::post('/admin/transaksi/{id}/update-status', [TransaksiController::class, 'updateStatus'])->name('transaksi.updateStatus');
+    Route::delete('/admin/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
+});
 });
 
 // =======================
@@ -105,6 +115,9 @@ Route::get('/paket-umrah-ramadhan', fn() => view('jamaah.paketumrahramadhan'))->
 // =======================
 // BOOKING
 // =======================
-Route::middleware(['auth'])->group(function () {
-    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
-});
+// Route::middleware(['auth'])->group(function () {
+//     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+// });
+Route::post('/transaksi/update-nominal/{id}', [TransaksiController::class, 'updateNominal'])->name('transaksi.updateNominal');
+Route::post('/transaksi/tambah-nominal/{id}', [TransaksiController::class, 'tambahNominal'])->name('transaksi.tambahNominal');
+

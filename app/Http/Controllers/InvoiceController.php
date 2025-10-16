@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
+use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
-    public function create($bookingId)
+    public function create($pendaftaranId)
     {
-        $booking = Booking::findOrFail($bookingId);
+        // Ambil data pendaftaran dengan relasi user dan paketTravel
+        $pendaftaran = Pendaftaran::with(['user', 'paketTravel'])->findOrFail($pendaftaranId);
 
-        // Jika ingin menambahkan data paket, bisa eager load
-        $booking->load('paketTravel');
-
-        return view('admin.invoice', compact('booking'));
+        return view('admin.invoice', compact('pendaftaran'));
     }
 }

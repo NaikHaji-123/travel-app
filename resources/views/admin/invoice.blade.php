@@ -22,7 +22,7 @@
             margin: 40px auto; 
             padding: 30px; 
             background-color: #ffffff; 
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Shadow lebih tebal */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
             border-radius: 12px; 
         }
         .separator { border: 0; height: 1px; background-color: #ddd; margin: 25px 0; }
@@ -31,7 +31,7 @@
         .invoice-header { 
             display: flex; 
             justify-content: space-between; 
-            align-items: flex-end; /* Posisikan nomor invoice di bawah */
+            align-items: flex-end; 
             margin-bottom: 30px;
         }
         .header-left {
@@ -40,12 +40,12 @@
             gap: 15px; 
         }
         .company-logo {
-            max-height: 55px; /* Ukuran logo */
+            max-height: 55px; 
             width: auto;
             border-radius: 4px; 
         }
         .invoice-header h1 { 
-            color: #007bff; /* Primary Brand Color (Biru) */
+            color: #007bff; 
             margin: 0; 
             font-size: 2.2em; 
             letter-spacing: 0.5px;
@@ -55,7 +55,7 @@
             font-size: 1.1em; 
             font-weight: bold; 
             color: #6c757d; 
-            background-color: #f0f4ff; /* Background lebih terang */
+            background-color: #f0f4ff; 
             border: 1px solid #007bff;
             padding: 8px 15px; 
             border-radius: 6px;
@@ -118,13 +118,13 @@
         /* Payment Highlighting */
         .total-price-cell { 
             font-weight: bold; 
-            color: #007bff; /* Total harga menggunakan warna brand */
+            color: #007bff; 
         }
         .outstanding-cell { 
             font-weight: 700; 
             font-size: 1.15em; 
-            color: #dc3545; /* Danger Red */
-            background-color: #ffeaea; /* Background merah muda */
+            color: #dc3545; 
+            background-color: #ffeaea; 
         }
 
         /* Status Badges */
@@ -157,7 +157,7 @@
             width: 40%;
         }
         .signature-block .role { margin-bottom: 5px; font-weight: 600; }
-        .signature-space { height: 70px; margin: 10px 0; } /* Hapus garis putus-putus */
+        .signature-space { height: 70px; margin: 10px 0; } 
         .signature-block .signer { font-size: 1em; }
 
         .qr-block {
@@ -177,7 +177,7 @@
             text-align: center;
             margin-top: 40px;
             padding-top: 15px;
-            border-top: 2px solid #007bff; /* Garis footer yang lebih tegas */
+            border-top: 2px solid #007bff; 
             color: #6c757d;
             font-style: italic;
         }
@@ -210,7 +210,6 @@
             body { background-color: #fff !important; }
             .invoice-container { margin: 0 auto; box-shadow: none; border-radius: 0; }
             .btn-print-wrapper { display: none; }
-            /* Force print colors */
             .data-table th, .payment-table th, .outstanding-cell, .status-lunas, .status-belum { 
                 -webkit-print-color-adjust: exact !important; 
                 color-adjust: exact !important; 
@@ -220,6 +219,23 @@
 </head>
 <body>
 
+@php
+    // safety helpers
+    $user = $pendaftaran->user ?? null;
+    $paket = $pendaftaran->paketTravel ?? null;
+
+    // try common name fields
+    $userName = $user->nama ?? $user->name ?? '-';
+    $userHp   = $user->no_hp ?? $user->hp ?? '-';
+
+    $hargaPaket = $paket->harga ?? 0;
+    $diskon     = $pendaftaran->diskon ?? 0;
+    $sudahBayar = $pendaftaran->sudah_bayar ?? $pendaftaran->sudahBayar ?? 0;
+
+    $total = max(0, $hargaPaket - $diskon);
+    $sisa  = max(0, $total - $sudahBayar);
+@endphp
+
 <div class="invoice-container">
     
     <header class="invoice-header">
@@ -228,7 +244,7 @@
             <img src="{{ asset('img/logo.png') }}" alt="Company Logo" class="company-logo">
             <h1>RIWAYAT MUTASI PEMBAYARAN</h1>
         </div>
-        <p class="invoice-number">#INV-{{ $booking->id ?? '00000' }}</p>
+        <p class="invoice-number">#INV-{{ $pendaftaran->id ?? '00000' }}</p>
     </header>
     
     <hr class="separator"/>
@@ -243,9 +259,9 @@
         </div>
         <div class="invoice-info client-data">
             <h2><i class="bi bi-person"></i> Data Jamaah</h2>
-            <p><strong>{{ $booking->nama }}</strong></p>
-            <p><i class="bi bi-telephone"></i> {{ $booking->hp }}</p>
-            <p><i class="bi bi-envelope"></i> {{ $booking->email ?? '-' }}</p>
+            <p><strong>{{ $userName }}</strong></p>
+            <p><i class="bi bi-telephone"></i> {{ $userHp }}</p>
+            <p><i class="bi bi-envelope"></i> {{ $user->email ?? '-' }}</p>
             <p><strong>Invoice Date:</strong> {{ \Carbon\Carbon::now()->format('d M Y') }}</p>
         </div>
     </div>
@@ -266,11 +282,13 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y') }}</td>
-                    <td>{{ $booking->paketTravel->nama_paket ?? $booking->paket }}</td>
-                    <td>{{ \Carbon\Carbon::parse($booking->paketTravel->tanggal_berangkat ?? now())->format('d M Y') }}</td>
-                    <td>{{ $booking->tipe_kamar ?? 'Quad' }}</td>
-                    <td>{{ $booking->jumlah_pax ?? 1 }}</td>
+                    <td>{{ \Carbon\Carbon::parse($pendaftaran->created_at)->format('d M Y') }}</td>
+                    <td>{{ $paket->nama_paket ?? ($pendaftaran->paket ?? '-') }}</td>
+                    <td>
+                        {{ \Carbon\Carbon::parse($paket->tanggal_berangkat ?? $pendaftaran->tanggal_berangkat ?? now())->format('d M Y') }}
+                    </td>
+                    <td>{{ $pendaftaran->tipe_kamar ?? 'Quad' }}</td>
+                    <td>{{ $pendaftaran->jumlah_pax ?? $pendaftaran->pax ?? 1 }}</td>
                 </tr>
             </tbody>
         </table>
@@ -291,15 +309,13 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Rp {{ number_format($booking->paketTravel->harga ?? 0,0,',','.') }}</td>
-                    <td>Rp {{ number_format($booking->diskon ?? 0,0,',','.') }}</td>
-                    <td class="total-price-cell">Rp {{ number_format(($booking->paketTravel->harga ?? 0)-($booking->diskon ?? 0),0,',','.') }}</td>
-                    <td>Rp {{ number_format($booking->sudah_bayar ?? 0,0,',','.') }}</td>
-                    <td class="outstanding-cell">
-                        Rp {{ number_format(($booking->paketTravel->harga ?? 0)-($booking->diskon ?? 0)-($booking->sudah_bayar ?? 0),0,',','.') }}
-                    </td>
+                    <td>Rp {{ number_format($hargaPaket,0,',','.') }}</td>
+                    <td>Rp {{ number_format($diskon,0,',','.') }}</td>
+                    <td class="total-price-cell">Rp {{ number_format($total,0,',','.') }}</td>
+                    <td>Rp {{ number_format($sudahBayar,0,',','.') }}</td>
+                    <td class="outstanding-cell">Rp {{ number_format($sisa,0,',','.') }}</td>
                     <td>
-                        @if(($booking->paketTravel->harga ?? 0)-($booking->diskon ?? 0)-($booking->sudah_bayar ?? 0) <= 0)
+                        @if($sisa <= 0)
                             <span class="status-badge status-lunas"><i class="bi bi-check-circle"></i> Lunas</span>
                         @else
                             <span class="status-badge status-belum"><i class="bi bi-x-circle"></i> Belum Lunas</span>
