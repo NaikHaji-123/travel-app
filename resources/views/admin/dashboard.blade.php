@@ -558,7 +558,11 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $t->user->nama ?? '-' }}</td>
-                            <td>{{ $t->pendaftaran->paketTravel->nama_paket ?? '-' }}</td>
+                            <td>
+    {{ $t->pendaftaran && $t->pendaftaran->paketTravel 
+        ? $t->pendaftaran->paketTravel->nama_paket 
+        : '-' }}
+</td>
                             <td>Rp {{ number_format($t->jumlah, 0, ',', '.') }}</td>
                             <td>
                                 @if ($t->status == 'pending')
@@ -679,116 +683,138 @@
 
 <!-- ========================= TAB KARYAWAN ========================= -->
 <div class="tab-pane fade" id="karyawan" role="tabpanel" aria-labelledby="karyawan-tab">
-    <h5 class="mt-3 mb-3 text-secondary">
-        <i class="bi bi-person-workspace me-2"></i> Manajemen Data Karyawan
-    </h5>
 
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#tambahKaryawanModal">
-        <i class="bi bi-person-plus-fill me-1"></i> Tambah Karyawan
-    </button>
+    <div class="card shadow-sm border-0 mt-3">
+        <div class="card-body">
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>Nama</th>
-                    <th>Jabatan</th>
-                    <th>Email</th>
-                    <th>No. HP</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($karyawan as $k)
-                <tr>
-                    <td class="fw-medium">{{ $k->nama }}</td>
-                    <td>{{ $k->jabatan ?? 'Staf' }}</td>
-                    <td>{{ $k->email }}</td>
-                    <td>{{ $k->no_hp }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal" data-bs-target="#editKaryawanModal{{ $k->id }}">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-                        <form action="{{ route('karyawan.destroy', $k->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus karyawan ini?')">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-secondary mb-0">
+                    <i class="bi bi-person-workspace me-2 text-primary"></i> 
+                    Manajemen Data Karyawan
+                </h5>
+                <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#tambahKaryawanModal">
+                    <i class="bi bi-person-plus-fill me-1"></i> Tambah Karyawan
+                </button>
+            </div>
 
-                <!-- Modal Edit -->
-                <div class="modal fade" id="editKaryawanModal{{ $k->id }}" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <form action="{{ route('karyawan.update', $k->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="modal-content">
-                                <div class="modal-header bg-info text-white">
-                                    <h5 class="modal-title">Edit Karyawan: {{ $k->nama }}</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <label>Nama</label>
-                                    <input type="text" name="nama" class="form-control mb-2" value="{{ $k->nama }}" required>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nama</th>
+                            <th>Jabatan</th>
+                            <th>Email</th>
+                            <th>No. HP</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($karyawan as $k)
+                        <tr>
+                            <td class="fw-semibold">{{ $k->nama }}</td>
+                            <td>{{ $k->jabatan ?? 'Staf' }}</td>
+                            <td>{{ $k->email }}</td>
+                            <td>{{ $k->no_hp }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-info me-1" data-bs-toggle="modal" data-bs-target="#editKaryawanModal{{ $k->id }}">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <form action="{{ route('karyawan.destroy', $k->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin hapus karyawan ini?')">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
 
-                                    <label>Jabatan</label>
-                                    <input type="text" name="jabatan" class="form-control mb-2" value="{{ $k->jabatan }}" required>
-
-                                    <label>Email</label>
-                                    <input type="email" name="email" class="form-control mb-2" value="{{ $k->email }}" required>
-
-                                    <label>No. HP</label>
-                                    <input type="text" name="no_hp" class="form-control mb-2" value="{{ $k->no_hp }}" required>
-
-                                    <small class="text-muted">Kosongkan password jika tidak diubah.</small>
-                                    <input type="password" name="password" class="form-control mt-1" placeholder="Password baru">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-info text-white">Simpan</button>
-                                </div>
+                        <!-- Modal Edit -->
+                        <div class="modal fade" id="editKaryawanModal{{ $k->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <form action="{{ route('karyawan.update', $k->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-info text-white">
+                                            <h5 class="modal-title"><i class="bi bi-pencil-square me-1"></i> Edit Karyawan</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-2">
+                                                <label class="form-label">Nama</label>
+                                                <input type="text" name="nama" class="form-control" value="{{ $k->nama }}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Jabatan</label>
+                                                <input type="text" name="jabatan" class="form-control" value="{{ $k->jabatan }}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" name="email" class="form-control" value="{{ $k->email }}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">No. HP</label>
+                                                <input type="text" name="no_hp" class="form-control" value="{{ $k->no_hp }}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Password (Opsional)</label>
+                                                <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-info text-white">Simpan Perubahan</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                </div>
-                @empty
-                <tr>
-                    <td colspan="5" class="text-center text-muted">Belum ada data karyawan</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+                        </div>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="bi bi-emoji-neutral me-1"></i> Belum ada data karyawan
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Modal Tambah Karyawan -->
 <div class="modal fade" id="tambahKaryawanModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <form action="{{ route('karyawan.store') }}" method="POST">
             @csrf
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Tambah Karyawan Baru</h5>
+                    <h5 class="modal-title"><i class="bi bi-person-plus-fill me-1"></i> Tambah Karyawan Baru</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <label>Nama</label>
-                    <input type="text" name="nama" class="form-control mb-2" required>
-
-                    <label>Jabatan</label>
-                    <input type="text" name="jabatan" class="form-control mb-2" required>
-
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control mb-2" required>
-
-                    <label>No. HP</label>
-                    <input type="text" name="no_hp" class="form-control mb-2" required>
-
-                    <label>Password Awal</label>
-                    <input type="password" name="password" class="form-control" required>
+                    <div class="mb-2">
+                        <label class="form-label">Nama</label>
+                        <input type="text" name="nama" class="form-control" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Jabatan</label>
+                        <input type="text" name="jabatan" class="form-control" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">No. HP</label>
+                        <input type="text" name="no_hp" class="form-control" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Password Awal</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -798,6 +824,7 @@
         </form>
     </div>
 </div>
+
 
 
 
@@ -821,7 +848,7 @@
                                 {{-- Loop data agent (asumsi variabel $agents tersedia) --}}
                                 @foreach($agents as $a)
                                 <tr>
-                                    <td class="fw-medium">{{ $a->nama }}</td>
+                                    <td class="fw-medium">{{ $a->nama_agent }}</td>
                                     <td><span class="badge bg-secondary">{{ $a->kode_agent ?? 'A001' }}</span></td>
                                     <td>{{ $a->email }}</td>
                                     <td>{{ $a->no_hp }}</td>
@@ -841,13 +868,13 @@
                                             @method('PUT')
                                             <div class="modal-content">
                                                 <div class="modal-header bg-info text-white">
-                                                    <h5 class="modal-title">Edit Agent: {{ $a->nama }}</h5>
+                                                    <h5 class="modal-title">Edit Agent: {{ $a->nama_agent }}</h5>
                                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="mb-3">
                                                         <label class="form-label fw-medium">Nama Agent</label>
-                                                        <input type="text" name="nama" class="form-control" value="{{ $a->nama }}" required>
+                                                        <input type="text" name="nama_agent" class="form-control" value="{{ $a->nama_agent }}" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label fw-medium">Kode Agent</label>
@@ -893,7 +920,7 @@
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label class="form-label fw-medium">Nama Agent</label>
-                                        <input type="text" name="nama" class="form-control" required>
+                                        <input type="text" name="nama_agent" class="form-control" required>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label fw-medium">Kode Agent</label>

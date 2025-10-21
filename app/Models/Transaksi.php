@@ -32,5 +32,18 @@ class Transaksi extends Model
         return $this->belongsTo(Booking::class);
     }
 
+    public function paketTravel()
+{
+    return $this->hasOneThrough(
+        \App\Models\PaketTravel::class,
+        \App\Models\Pendaftaran::class,
+        'id', // Foreign key di tabel pendaftarans
+        'id', // Foreign key di tabel paket_travels
+        'pendaftaran_id', // Foreign key di tabel transaksis
+        'paket_travel_id' // Foreign key di tabel pendaftarans
+    );
+}
+
+
     
 }

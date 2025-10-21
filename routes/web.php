@@ -9,7 +9,10 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\TestimoniController;
+
 use App\Models\PaketTravel;
+use App\Models\Testimoni;
 
 // =======================
 // RESOURCE PAKET & JAMAAH
@@ -20,10 +23,7 @@ use App\Models\PaketTravel;
 // =======================
 // HALAMAN UMUM
 // =======================
-Route::get('/', function () {
-    $pakets = PaketTravel::all();
-    return view('jamaah.halamanutama', compact('pakets'));
-})->name('home');
+
 
 Route::get('/paket/{id}', [PaketController::class, 'show'])->name('paket.show');
 
@@ -121,3 +121,12 @@ Route::get('/paket-umrah-ramadhan', fn() => view('jamaah.paketumrahramadhan'))->
 Route::post('/transaksi/update-nominal/{id}', [TransaksiController::class, 'updateNominal'])->name('transaksi.updateNominal');
 Route::post('/transaksi/tambah-nominal/{id}', [TransaksiController::class, 'tambahNominal'])->name('transaksi.tambahNominal');
 
+// =======================
+// TESTIMONI
+// =======================
+Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni');
+Route::get('/', function () {
+    $pakets = PaketTravel::all();
+    $testimonis = Testimoni::all(); // ✅ tambahkan ini
+    return view('jamaah.halamanutama', compact('pakets', 'testimonis'));
+})->name('home');

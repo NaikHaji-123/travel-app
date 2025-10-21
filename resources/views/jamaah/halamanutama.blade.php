@@ -313,35 +313,32 @@
 </section>
 
 <!-- Testimoni -->
-<!-- Testimoni -->
-<section id="testimoni" class="section py-5" style="background: linear-gradient(to bottom, #f0f9ff, #ffffff);">
+<section id="testimoni" class="py-5" style="background: linear-gradient(to bottom, #f0f9ff, #ffffff);">
   <div class="container text-center">
-    <h2 class="mb-5 text-primary fw-bold">Testimoni Jamaah</h2>
-    <div class="testimoni-wrapper d-flex flex-wrap justify-content-center gap-4">
-      
-      <!-- Box 1 -->
-      <div class="testimoni-box p-4 rounded-4 shadow" data-aos="fade-up" 
-           style="background-color: #e6f7ff; max-width: 300px;">
-        <p class="mb-3">"Alhamdulillah, pelayanan selama Umrah sangat memuaskan. Terima kasih Syakirasya!"</p>
-        <h4 class="fw-semibold text-primary">🌟 Ibu Ningsih - Tangerang</h4>
+    <h2 class="mb-5 text-primary fw-bold" data-aos="fade-up">💬 Testimoni Jamaah</h2>
+
+    <div class="row justify-content-center g-4">
+      @foreach($testimonis as $t)
+      <div class="col-md-4 col-sm-6">
+        <div class="card border-0 shadow-sm p-4 h-100 rounded-4" 
+             style="background-color: #e8f7ff; transition: transform 0.3s;"
+             onmouseover="this.style.transform='translateY(-5px)';" 
+             onmouseout="this.style.transform='translateY(0)';">
+
+          <!-- ✅ Perbaikan di sini -->
+          <img src="{{ asset($t->foto ?? 'https://cdn-icons-png.flaticon.com/512/847/847969.png') }}" 
+               alt="{{ $t->nama }}" class="rounded-circle shadow mx-auto mb-3" width="90" height="90">
+
+          <p class="fst-italic">"{{ $t->pesan }}"</p>
+          <h5 class="fw-semibold text-primary mt-3">🌟 {{ $t->nama }} - {{ $t->kota }}</h5>
+        </div>
       </div>
-      
-      <!-- Box 2 -->
-      <div class="testimoni-box p-4 rounded-4 shadow" data-aos="fade-up" 
-           style="background-color: #e6f7ff; max-width: 300px;">
-        <p class="mb-3">"Tim pembimbing sangat sabar dan berpengalaman. Perjalanan ibadah kami jadi lancar."</p>
-        <h4 class="fw-semibold text-primary">🌟 Pak Ujang - Tangerang</h4>
-      </div>
-      
-      <!-- Box 3 -->
-      <div class="testimoni-box p-4 rounded-4 shadow" data-aos="fade-up" 
-           style="background-color: #e6f7ff; max-width: 300px;">
-        <p class="mb-3">"Hotel nyaman, makanan enak, dan jadwal tertib. Saya akan rekomendasikan ke keluarga."</p>
-        <h4 class="fw-semibold text-primary">🌟 Pak Deripin - Tangerang</h4>
-      </div>
+      @endforeach
     </div>
   </div>
 </section>
+
+
 
 
 <!-- Footer -->

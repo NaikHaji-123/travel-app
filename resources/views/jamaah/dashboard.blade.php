@@ -186,7 +186,10 @@
                             <span class="status-badge bg-{{ $color }} text-white">{{ $status }}</span>
                         </p>
                         
-                       <p>Total Pembayaran Terkumpul: Rp {{ number_format($totalPembayaran, 0, ',', '.') }}</p>
+                <p class="fw-bold text-success">
+    Total Pembayaran Terkumpul: Rp {{ number_format($totalPembayaran, 0, ',', '.') }}
+</p>
+
 
 
                     </div>

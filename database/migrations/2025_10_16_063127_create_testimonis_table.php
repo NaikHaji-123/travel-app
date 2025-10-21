@@ -8,19 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('agents', function (Blueprint $table) {
+        Schema::create('testimonis', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_agent');
-            $table->string('kode_agent')->unique();
-            $table->string('email')->unique();
-            $table->string('no_hp')->nullable();
-            $table->string('password');
+            $table->string('nama');
+            $table->string('kota');
+            $table->text('pesan');
+            $table->string('foto')->nullable(); // foto opsional
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('agents');
+        Schema::dropIfExists('testimonis');
     }
 };

@@ -22,22 +22,33 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        // ✅ Validasi input agar aman
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
+            // ✅ Cek role dan arahkan ke dashboard yang sesuai
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'jamaah') {
                 return redirect()->route('jamaah.dashboard');
             } else {
                 Auth::logout();
-                return redirect()->route('login')->withErrors('Role tidak dikenali.');
+                return redirect()->route('login')->withErrors([
+                    'role' => 'Role tidak dikenali.'
+                ]);
             }
         }
 
-        return redirect()->back()->withErrors('Email atau password salah');
+        return back()->withErrors([
+            'login' => 'Email atau password salah.'
+        ]);
     }
 
     /**
@@ -61,26 +72,25 @@ class AuthController extends Controller
      * Proses register
      */
     public function register(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:6|confirmed',
-        'no_hp' => 'required|string|max:20', // tambahkan validasi hp
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'no_hp' => 'required|string|max:20',
+        ]);
 
-    $user = User::create([
-        'nama' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'no_hp' => $request->no_hp, // tambahkan ini 👈
-        'role' => 'jamaah',
-    ]);
+        // ✅ Simpan user baru dengan role default "jamaah"
+        $user = User::create([
+            'nama' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'no_hp' => $request->no_hp,
+            'role' => 'jamaah',
+        ]);
 
-    Auth::login($user);
+        Auth::login($user);
 
-    return redirect()->route('jamaah.dashboard');
+        return redirect()->route('jamaah.dashboard');
+    }
 }
-
-}
-

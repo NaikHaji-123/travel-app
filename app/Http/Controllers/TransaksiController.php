@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaksi;
+use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,27 +12,40 @@ class TransaksiController extends Controller
     // 📋 Tampilkan semua transaksi (khusus admin)
     public function index()
     {
-        $transaksis = Transaksi::with(['user', 'pendaftaran'])->get();
-        return view('admin.transaksi.index', compact('transaksis'));
+        // Ambil data transaksi lengkap dengan relasi user, pendaftaran, dan paket travel
+        $transaksis = Transaksi::with(['user', 'pendaftaran.paketTravel'])->get();
+
+        // Tambahan: jumlah jamaah dan paket untuk ditampilkan di dashboard admin
+        $jumlahJamaah = \App\Models\Jamaah::count();
+        $jumlahPaket = \App\Models\PaketTravel::count();
+
+        return view('admin.dashboard', compact('transaksis', 'jumlahJamaah', 'jumlahPaket'));
     }
 
     // 💾 Simpan transaksi baru (misal setelah pendaftaran disetujui)
     public function store(Request $request)
     {
         $request->validate([
-            'pendaftaran_id' => 'required|exists:pendaftarans,id',
-            'jumlah' => 'required|numeric|min:0',
+            'user_id' => 'required|exists:users,id',
+            'jumlah' => 'required|numeric',
+            'status' => 'required|string',
         ]);
 
+        // ✅ Import model Pendaftaran (pastikan sudah di atas)
+        // Cari pendaftaran terakhir dari user terkait
+        $pendaftaran = Pendaftaran::where('user_id', $request->user_id)
+            ->latest()
+            ->first();
+
+        // Simpan transaksi baru
         Transaksi::create([
-            'user_id' => Auth::id(),
-            'pendaftaran_id' => $request->pendaftaran_id,
+            'user_id' => $request->user_id,
+            'pendaftaran_id' => $pendaftaran ? $pendaftaran->id : null, // relasi ke pendaftaran
             'jumlah' => $request->jumlah,
-            'status' => 'pending',
-            'jenis_pembayaran' => 'dp', // defaultnya DP
+            'status' => $request->status,
         ]);
 
-        return redirect()->back()->with('success', 'Transaksi berhasil dibuat dan menunggu konfirmasi.');
+        return redirect()->back()->with('success', 'Transaksi berhasil ditambahkan.');
     }
 
     // ✅ Update status transaksi (Admin setujui / tolak)
@@ -45,7 +59,7 @@ class TransaksiController extends Controller
         return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui.');
     }
 
-    // 💰 Update nominal transaksi
+    // 💰 Update nominal transaksi (edit langsung)
     public function updateNominal(Request $request, $id)
     {
         $request->validate([

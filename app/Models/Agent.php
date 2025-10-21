@@ -17,7 +17,7 @@ class Agent extends Authenticatable
      * Kolom yang diizinkan untuk diisi melalui mass assignment.
      */
     protected $fillable = [
-        'nama',
+        'nama_agent',
         'kode_agent', // Kolom unik untuk Agent
         'email',
         'no_hp',

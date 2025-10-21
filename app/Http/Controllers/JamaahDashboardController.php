@@ -19,12 +19,13 @@ class JamaahDashboardController extends Controller
             ->latest()
             ->first();
 
-        // Hitung total pembayaran (jika sudah ada transaksi)
+        // Hitung total pembayaran dari semua transaksi berdasarkan pendaftaran
         $totalPembayaran = 0;
         if ($pendaftaran) {
-            $totalPembayaran = Transaksi::where('pendaftaran_id', $pendaftaran->id)
-                ->where('status', 'acc')
-                ->sum('jumlah');
+           $totalPembayaran = Transaksi::where('user_id', $user->id)
+    ->where('status', 'Lunas')
+    ->sum('jumlah');
+
         }
 
         // Ambil semua riwayat pendaftaran jamaah

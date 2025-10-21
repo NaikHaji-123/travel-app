@@ -79,7 +79,7 @@
       @csrf
       <div class="mb-3">
         <label for="name" class="form-label">Nama Lengkap</label>
-       <input type="text" name="name" class="form-control" id="name" placeholder="Contoh: Ahmad Fauzi" required />
+       <input type="text" name="name" class="form-control" id="name" placeholder="Contoh: Ahmad Sahroni" required />
 
       </div>
       <div class="mb-3">

@@ -31,4 +31,6 @@ class PaketTravel extends Model
     {
         return $this->hasMany(Booking::class, 'paket_id');
     }
+
+    
 }
