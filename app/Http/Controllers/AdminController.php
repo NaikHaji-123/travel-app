@@ -28,25 +28,86 @@ class AdminController extends Controller
         $pakets = PaketTravel::all();
         $jamaah = User::where('role', 'jamaah')->get();
         $pendaftaran = Pendaftaran::with(['user', 'paketTravel'])->get();
+        $pendaftarans = Pendaftaran::with(['user', 'paketTravel'])->get(); // ✅ tambahkan ini
         $karyawan = Karyawan::all(); 
         $agents = Agent::all();
         $transaksis = Transaksi::with(['user', 'pendaftaran.paketTravel'])->latest()->get();
         $totalPembayaran = Transaksi::where('status', 'acc')->sum('jumlah');
+        $totalLunas = Transaksi::where('metode_pembayaran', 'Lunas')->sum('total');
+$totalTabungan = Transaksi::where('metode_pembayaran', 'Tabungan')->sum('total');
+$totalDP = Transaksi::where('metode_pembayaran', 'DP')->sum('total');
+$totalPendingTransaksi = Transaksi::where('status', 'pending')->sum('total');
 
-        return view('admin.dashboard', compact(
-            'totalPaket',
-            'totalJamaah',
-            'bookingPending',
-            'pakets',
-            'jamaah',
-            'pendaftaran',
-            'karyawan',
-            'agents',
-            'totalAgents',
-            'transaksis',
-            'totalPembayaran'
-        ));
+
+    $jamaahList = User::select('id', 'name')
+        ->where('role', 'jamaah')
+        ->orderBy('name')
+        ->get();
+
+  return view('admin.dashboard', compact(
+    'totalPaket',
+    'totalJamaah',
+    'bookingPending',
+    'pakets',
+    'jamaah',
+    'pendaftaran',
+    'pendaftarans',
+    'karyawan',
+    'agents',
+    'totalAgents',
+    'transaksis',
+    'totalPembayaran',
+    'jamaahList',
+    'totalLunas',
+    'totalTabungan',
+    'totalDP',
+    'totalPendingTransaksi'
+));
+}
+public function storeJamaah(Request $request)
+{
+    $validated = $request->validate([
+        'nama' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'no_hp' => 'required|string|max:20',
+        'password' => 'required|string|min:6|confirmed',
+    ]);
+
+    User::create([
+        'name' => $validated['nama'],
+        'email' => $validated['email'],
+        'no_hp' => $validated['no_hp'],
+        'password' => bcrypt($validated['password']),
+        'role' => 'jamaah',
+    ]);
+
+    return redirect()->back()->with('success', 'Jamaah berhasil ditambahkan!');
+}
+public function updateJamaah(Request $request, $id)
+{
+    $jamaah = User::findOrFail($id);
+
+    $validated = $request->validate([
+        'nama' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $jamaah->id,
+        'no_hp' => 'required|string|max:20',
+        'password' => 'nullable|string|min:6',
+    ]);
+
+    // Mapping nama → name (karena field di DB biasanya "name")
+    $jamaah->name = $validated['nama'];
+    $jamaah->email = $validated['email'];
+    $jamaah->no_hp = $validated['no_hp'];
+
+    // Jika password diisi, update; jika tidak, biarkan
+    if (!empty($validated['password'])) {
+        $jamaah->password = bcrypt($validated['password']);
     }
+
+    $jamaah->save();
+
+    return redirect()->back()->with('success', 'Data jamaah berhasil diperbarui!');
+}
 
     // ========================
     // CRUD AGENT
