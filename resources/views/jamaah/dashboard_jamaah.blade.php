@@ -468,12 +468,13 @@
         @endif
     </section>
     
-    <div class="text-center mt-5 p-4 bg-white shadow rounded-3 border">
-        <p class="mb-1 text-muted">Butuh Bantuan Cepat? Kontak Kami:</p>
-        <p class="fw-bolder text-primary-navy fs-5">
-            <i class="bi bi-headset me-2 text-success"></i> +62 812-3456-7890
-        </p>
-    </div>
+   <!-- Tombol Live Chat -->
+<div class="text-end mb-3">
+    <a href="{{ route('jamaah.chat') }}" class="btn btn-primary">
+        💬 Live Chat
+    </a>
+</div>
+
 
 </div>
 

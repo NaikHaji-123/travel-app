@@ -132,6 +132,33 @@ public function updateJamaah(Request $request, $id)
 
         return redirect()->back()->with('success', 'Agent berhasil ditambahkan!');
     }
+public function updateAgent(Request $request, $id)
+{
+    $agent = Agent::findOrFail($id);
+
+    $validated = $request->validate([
+        'nama_agent' => 'required|string|max:255',
+        'kode_agent' => 'required|string|max:10|unique:agents,kode_agent,' . $agent->id,
+        'email' => 'required|email|unique:agents,email,' . $agent->id,
+        'no_hp' => 'required|string|max:15',
+        'password' => 'nullable|string|min:6',
+    ]);
+
+    // Update field utama
+    $agent->nama_agent = $validated['nama_agent'];
+    $agent->kode_agent = $validated['kode_agent'];
+    $agent->email = $validated['email'];
+    $agent->no_hp = $validated['no_hp'];
+
+    // Jika password baru diisi, update password
+    if (!empty($validated['password'])) {
+        $agent->password = bcrypt($validated['password']);
+    }
+
+    $agent->save();
+
+    return redirect()->back()->with('success', 'Data agent berhasil diperbarui!');
+}
 
     public function destroyAgent($id)
     {

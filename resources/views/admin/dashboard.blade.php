@@ -501,6 +501,25 @@
                                     <h4 class="fw-bold">Rp {{ number_format($totalPendingTransaksi ?? 0, 0, ',', '.') }}</h4>
                                 </div>
                             </div>
+                            {{-- 🔹 Live Chat Section --}}
+<div class="mt-5">
+    <h5 class="text-secondary fw-bold mb-3">
+        <i class="bi bi-chat-dots-fill me-2 text-primary"></i> Fitur Komunikasi
+    </h5>
+
+    <div class="card shadow-sm border-0 bg-light">
+        <div class="card-body d-flex flex-column flex-sm-row align-items-center justify-content-between">
+            <div>
+                <h6 class="fw-bold mb-1">💬 Live Chat Jamaah</h6>
+                <p class="text-muted mb-0">Buka percakapan langsung dengan jamaah tanpa harus menggunakan WhatsApp.</p>
+            </div>
+            <a href="{{ route('admin.chat') }}" class="btn btn-primary mt-3 mt-sm-0">
+                <i class="bi bi-chat-text-fill me-1"></i> Buka Live Chat
+            </a>
+        </div>
+    </div>
+</div>
+
                         </div>
                     </div>
                 </div>

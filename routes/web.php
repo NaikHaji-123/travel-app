@@ -133,3 +133,17 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::patch('/transaksi/{id}/status', [TransaksiController::class, 'updateStatus'])->name('transaksi.updateStatus');
     Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
 });
+use App\Http\Controllers\ChatController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/jamaah/chat', [ChatController::class, 'index'])->name('jamaah.chat');
+    Route::post('/jamaah/chat/send', [ChatController::class, 'send'])->name('jamaah.chat.send');
+});
+use App\Http\Controllers\AdminChatController;
+
+Route::prefix('admin/chat')->group(function() {
+    Route::get('/', [AdminChatController::class, 'index'])->name('admin.chat');
+    Route::get('/{user}', [AdminChatController::class, 'show'])->name('admin.chat.show');
+    Route::post('/send', [AdminChatController::class, 'send'])->name('admin.chat.send');
+    Route::get('/fetch/{userId}', [AdminChatController::class, 'fetchMessages']); // untuk AJAX polling
+});

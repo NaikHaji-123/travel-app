@@ -109,7 +109,7 @@
         }
 
         /* ===================================== */
-        /* REVISI FOKUS: KARTU PAKET */
+        /* KARTU PAKET */
         /* ===================================== */
 
         .paket-scroll-container {
@@ -221,19 +221,65 @@
             padding: 0;
         }
         
-        .whatsapp-float {
+        /* ===================================== */
+        /* CUSTOM FLOATING BUTTONS (Live Chat & WhatsApp) */
+        /* ===================================== */
+
+        /* Container untuk menampung kedua tombol di kanan bawah */
+        .floating-action-container {
             position: fixed;
+            bottom: 40px; 
+            right: 40px; 
+            z-index: 1000;
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-end; 
+            gap: 15px; 
+        }
+
+        /* Gaya untuk tombol chat baru */
+        .chat-float {
             width: 60px;
             height: 60px;
-            bottom: 40px;
-            right: 40px;
+            background-color: var(--bs-primary-navy); 
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: static; /* Dikelola oleh container */
+        }
+        .chat-float:hover {
+            background-color: #004d99; 
+            color: #FFF;
+            transform: scale(1.05);
+        }
+
+        /* Tombol Live Chat yang lebih lebar */
+        .chat-float-extended {
+            width: auto;
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+
+        /* WhatsApp Button (Menggunakan styling yang diperbarui agar sesuai dengan container) */
+        .whatsapp-float {
+            position: static; /* Dikelola oleh container */
+            bottom: unset;
+            right: unset;
+            width: 60px;
+            height: 60px;
             background-color: #25d366;
             color: #FFF;
             border-radius: 50px;
             text-align: center;
             font-size: 30px;
             box-shadow: 2px 2px 3px #999;
-            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -468,23 +514,27 @@
         @endif
     </section>
     
-    <div class="text-center mt-5 p-4 bg-white shadow rounded-3 border">
-        <p class="mb-1 text-muted">Butuh Bantuan Cepat? Kontak Kami:</p>
-        <p class="fw-bolder text-primary-navy fs-5">
-            <i class="bi bi-headset me-2 text-success"></i> +62 812-3456-7890
-        </p>
-    </div>
-
 </div>
 
-<a href="https://wa.me/6281234567890?text=Halo%20Admin%2C%20saya%20ingin%20bertanya%20tentang%20status%20pendaftaran%20saya%20atas%20nama%20{{ $user->name ?? 'Jamaah' }}." 
-   class="whatsapp-float" 
-   target="_blank" 
-   data-bs-toggle="tooltip" 
-   data-bs-placement="left" 
-   title="Hubungi Kami via WhatsApp">
-    <i class="bi bi-whatsapp"></i>
-</a>
+<div class="floating-action-container">
+    
+    <a href="{{ route('jamaah.chat') }}" 
+       class="chat-float chat-float-extended"
+       data-bs-toggle="tooltip" 
+       data-bs-placement="left" 
+       title="Mulai Live Chat">
+        <i class="bi bi-chat-dots-fill me-2"></i> Live Chat
+    </a>
+
+    <a href="https://wa.me/6281234567890?text=Halo%20Admin%2C%20saya%20ingin%20bertanya%20tentang%20status%20pendaftaran%20saya%20atas%20nama%20{{ $user->name ?? 'Jamaah' }}." 
+       class="whatsapp-float" 
+       target="_blank" 
+       data-bs-toggle="tooltip" 
+       data-bs-placement="left" 
+       title="Hubungi Kami via WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
