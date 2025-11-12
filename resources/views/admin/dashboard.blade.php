@@ -1439,9 +1439,9 @@
                         </div>
                         
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">{{ Auth::user()->nama ?? 'Admin Default' }}</h5>
+                            <h5 class="mb-1">{{ Auth::user()->name ?? 'Admin Default' }}</h5>
                             <p class="mb-1 text-muted"><i class="bi bi-envelope me-1 text-primary"></i> {{ Auth::user()->email ?? 'admin@syakirasya.com' }}</p>
-                            <p class="mb-3 text-muted"><i class="bi bi-clock me-1 text-primary"></i> Terakhir Login: *{{ Auth::user()->last_login ?? \Carbon\Carbon::now()->format('d M Y H:i') }}*</p>
+                            <p class="mb-3 text-muted"><i class="bi bi-clock me-1 text-primary"></i> Terakhir Login: {{ Auth::user()->last_login ?? \Carbon\Carbon::now()->format('d M Y H:i') }}</p>
                             
                             <button class="btn btn-primary btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#ubahPasswordModal">
                                 <i class="bi bi-key-fill me-1"></i> Ubah Password
